@@ -226,57 +226,85 @@ self-certifying the identifier must be derived from the initial verkey associate
 <li>the pre-<code>did:indy</code> identifier for each object, and</li>
 <li>notes about the elements of the pre-<code>did:indy</code> identifier.</li>
 </ul>
+<p>This first version of the <code>did:indy</code> DID Method will use an <code>&lt;object-family&gt;</code> value of <code>anoncreds</code> and an <code>&lt;object-family-version&gt;</code> of <code>v0</code> to match the
+pre-specification, open source version of anoncreds as implemented in the <a path-0="github.com"path-1="hyperledger"path-2="indy-sdk"path-3="tree"path-4="master"path-5="docs"path-6="design"path-7="002-anoncreds"href="https://github.com/hyperledger/indy-sdk/tree/master/docs/design/002-anoncreds" >indy-sdk</a>.
+Later versions of the <code>did:indy</code> specification will use a higher <code>&lt;object-family-version&gt;</code> as the AnonCreds standardization work proceeds
+and the required dependency on Hyperledger Indy is removed. In this initial version, the DID URLs are closely aligned with the existing object identifiers.</p>
 <h4 id="schema"><a class="toc-anchor" href="#schema" >§</a> Schema</h4>
-<p>DID URL: <a path-0="indyscan.io"path-1="tx"path-2="SOVRIN_MAINNET"path-3="domain"path-4="56495"href="https://indyscan.io/tx/SOVRIN_MAINNET/domain/56495" ><code>did:indy:sovrin:F72i3Y3Q4i466efjYJYCHM/anoncreds/v1/SCHEMA/npdb/4.3.4</code></a></p>
-<p>Object Family: <code>anoncreds</code></p>
-<p>Family Version: <code>v1</code></p>
+<p>DID URL: <a path-0="indyscan.io"path-1="tx"path-2="SOVRIN_MAINNET"path-3="domain"path-4="56495"href="https://indyscan.io/tx/SOVRIN_MAINNET/domain/56495" ><code>did:indy:sovrin:F72i3Y3Q4i466efjYJYCHM/anoncreds/v0/SCHEMA/npdb/4.3.4</code></a></p>
+<ul>
+<li>Object Family: <code>anoncreds</code></li>
+<li>Family Version: <code>v0</code></li>
+<li>Name, example <code>npdb</code>: The client-defined schema name</li>
+<li>Schema Version, example <code>4.3.4</code>: The client-defined version of the <a class="term-reference" href="#term:schema">SCHEMA</a></li>
+</ul>
 <p>Response: Same as the Indy Node <a path-0="hyperledger-indy.readthedocs.io"path-1="projects"path-2="node"path-3="en"path-4="latest"path-5="requests.html#get-schema"href="https://hyperledger-indy.readthedocs.io/projects/node/en/latest/requests.html#get-schema" >GET_SCHEMA Txn</a></p>
 <p>Existing identifier: <code>F72i3Y3Q4i466efjYJYCHM:2:npdb:4.3.4</code></p>
 <ul>
 <li><code>2</code> is the enumerated object type</li>
-<li><code>npdb</code> is the client-defined schema name</li>
-<li><code>4.3.4</code> is the client-defined version of the <a class="term-reference" href="#term:schema">SCHEMA</a></li>
+<li>Name and Schema Version elements defined above.</li>
 </ul>
 <h4 id="claim-def"><a class="toc-anchor" href="#claim-def" >§</a> Claim Def</h4>
-<p>DID URL: <a path-0="indyscan.io"path-1="tx"path-2="SOVRIN_MAINNET"path-3="domain"path-4="56496"href="https://indyscan.io/tx/SOVRIN_MAINNET/domain/56496" ><code>did:indy:sovrin:5nDyJVP1NrcPAttP3xwMB9/anoncreds/v1/CLAIM_DEF/npdb</code></a></p>
-<p>Object Family: <code>anoncreds</code></p>
-<p>Family Version: <code>v1</code></p>
+<p>DID URL: <a path-0="indyscan.io"path-1="tx"path-2="SOVRIN_MAINNET"path-3="domain"path-4="56496"href="https://indyscan.io/tx/SOVRIN_MAINNET/domain/56496" ><code>did:indy:sovrin:5nDyJVP1NrcPAttP3xwMB9/anoncreds/v0/CLAIM_DEF/56495/npdb</code></a></p>
+<ul>
+<li>Object Family: <code>anoncreds</code></li>
+<li>Family Version: <code>v0</code></li>
+<li>Schema ID, example <code>56495</code>: A unique identifier for the schema upon which the ClaimDef is defined. In v0, the value is also the Hyperledger Indy instance sequence number for the Schema object used by this Claim Def.
+In later versions, we expect that the schema identifier will either be removed from the ClaimDef DID URL, or take a different form.</li>
+<li>Name, example <code>npdb</code>: The client-defined claim def name.</li>
+</ul>
 <p>Response: Same as the Indy Node <a path-0="hyperledger-indy.readthedocs.io"path-1="projects"path-2="node"path-3="en"path-4="latest"path-5="requests.html#get-claim-def"href="https://hyperledger-indy.readthedocs.io/projects/node/en/latest/requests.html#get-claim-def" >GET_CLAIM_DEF Txn</a></p>
-<p>Existing identifier: <code>did:indy:sovrin:5nDyJVP1NrcPAttP3xwMB9:3:CL:56495:npdb</code></p>
+<p>Existing identifier: <code>5nDyJVP1NrcPAttP3xwMB9:3:CL:56495:npdb</code></p>
 <ul>
 <li><code>3</code> is the enumerated object type</li>
 <li><code>CL</code> is the signature type for the claim def, which is <code>CL</code> for all claim defs on all existing Indy ledgers</li>
-<li><code>56495</code> is the sequence number for the Schema object used by this Claim Def</li>
-<li><code>npdb</code> is the client-defined claim def name</li>
+<li>Schema ID and Name elements defined above.</li>
 </ul>
-<p>Note that the DID URL format adds a constraint on the client-defined claim def name from the <code>did:sov</code> DID Method. Specifically, the same named claim def can no longer be associated with different <a class="term-reference" href="#term:schema">SCHEMA</a> objects.</p>
+<p>We recommend that AnonCred credential issuers use a unique Name item per Claim Def, and not rely on the embedded Schema ID
+remaining in the DID URL for a Claim Def in future versions of the <code>did:indy</code> method.</p>
 <h4 id="revocation-registry-definition"><a class="toc-anchor" href="#revocation-registry-definition" >§</a> Revocation Registry Definition</h4>
-<p>DID URL: <a path-0="indyscan.io"path-1="tx"path-2="SOVRIN_MAINNET"path-3="domain"path-4="56497"href="https://indyscan.io/tx/SOVRIN_MAINNET/domain/56497" ><code>did:indy:sovrin:5nDyJVP1NrcPAttP3xwMB9/anoncreds/v1/REV_REG_DEF/npdb/TAG1</code></a></p>
-<p>Object Family: <code>anoncreds</code></p>
-<p>Family Version: <code>v1</code></p>
+<p>DID URL: <a path-0="indyscan.io"path-1="tx"path-2="SOVRIN_MAINNET"path-3="domain"path-4="56497"href="https://indyscan.io/tx/SOVRIN_MAINNET/domain/56497" ><code>did:indy:sovrin:5nDyJVP1NrcPAttP3xwMB9/anoncreds/v0/REV_REG_DEF/56495/npdb/TAG1</code></a></p>
+<ul>
+<li>Object Family: <code>anoncreds</code></li>
+<li>Family Version: <code>v0</code></li>
+<li>Schema ID, example <code>56495</code>: A unique identifier for the schema upon which the ClaimDef/RevReg are defined. In v0, the value is also the Hyperledger Indy instance sequence number for the Schema object used by this Claim Def.
+In later versions, we expect that the schema identifier will either be removed from the RevReg DID URL, or take a different form.</li>
+<li>Claim Def Name, example <code>npdb</code>: The client-defined claim def name.</li>
+<li>Tag, example <code>TAG1</code>: The client-defined rev reg tag (name).</li>
+</ul>
 <p>Response: Same as the Indy Node <a path-0="hyperledger-indy.readthedocs.io"path-1="projects"path-2="node"path-3="en"path-4="latest"path-5="requests.html#get-revoc-reg-def"href="https://hyperledger-indy.readthedocs.io/projects/node/en/latest/requests.html#get-revoc-reg-def" >GET_REVOC_REG_DEF Txn</a></p>
 <p>Existing Identifier: <code>5nDyJVP1NrcPAttP3xwMB9:4:5nDyJVP1NrcPAttP3xwMB9:3:CL:56495:npdb:CL_ACCUM:TAG1</code></p>
 <ul>
 <li><code>4</code> is the enumerated object type</li>
 <li><code>5nDyJVP1NrcPAttP3xwMB9:3:CL:56495:npdb</code> is the identifier of the associated Claim Def</li>
-<li><code>TAG1</code> is the client-defined rev reg name</li>
+<li>Tag element defined above.</li>
 </ul>
 <h4 id="revocation-registry-entry"><a class="toc-anchor" href="#revocation-registry-entry" >§</a> Revocation Registry Entry</h4>
-<p>DID URL: <a path-0="indyscan.io"path-1="tx"path-2="SOVRIN_MAINNET"path-3="domain"path-4="58567"href="https://indyscan.io/tx/SOVRIN_MAINNET/domain/58567" ><code>did:indy:sovrin:5nDyJVP1NrcPAttP3xwMB9/anoncreds/v1/REV_REG_ENTRY/npdb/TAG1</code></a></p>
-<p>Object Family: <code>anoncreds</code></p>
-<p>Family Version: <code>v1</code></p>
+<p>DID URL: <a path-0="indyscan.io"path-1="tx"path-2="SOVRIN_MAINNET"path-3="domain"path-4="58567"href="https://indyscan.io/tx/SOVRIN_MAINNET/domain/58567" ><code>did:indy:sovrin:5nDyJVP1NrcPAttP3xwMB9/anoncreds/v0/REV_REG_ENTRY/56495/npdb/TAG1</code></a></p>
+<ul>
+<li>Object Family: <code>anoncreds</code></li>
+<li>Family Version: <code>v0</code></li>
+<li>Schema ID, example <code>56495</code>: A unique identifier for the schema upon which the ClaimDef/RevReg are defined. In v0, the value is also the Hyperledger Indy instance sequence number for the Schema object used by this Claim Def.
+In later versions, we expect that the schema identifier will either be removed from the RevReg DID URL, or take a different form.</li>
+<li>Claim Def Name, example <code>npdb</code>: The client-defined claim def name.</li>
+<li>Tag, example <code>TAG1</code>: The client-defined rev reg tag (name).</li>
+</ul>
 <p>The DID URL resolution response depends on the query parameters used, as follows:</p>
 <ul>
-<li><code>?versionId=&lt;timestamp&gt;</code>
+<li>None
 <ul>
-<li>Response is the same as the Indy Node <a path-0="hyperledger-indy.readthedocs.io"path-1="projects"path-2="node"path-3="en"path-4="latest"path-5="requests.html#get-revoc-reg"href="https://hyperledger-indy.readthedocs.io/projects/node/en/latest/requests.html#get-revoc-reg" >GET_REVOC_REG Txn</a></li>
-<li>If the parameter is left off the current time is used for the timestamp.</li>
+<li>Response is the same as the Indy Node <a path-0="hyperledger-indy.readthedocs.io"path-1="projects"path-2="node"path-3="en"path-4="latest"path-5="requests.html#get-revoc-reg"href="https://hyperledger-indy.readthedocs.io/projects/node/en/latest/requests.html#get-revoc-reg" >GET_REVOC_REG Txn</a> with the current time used for the timestamp.</li>
+</ul>
+</li>
+<li><code>?versionTime=&lt;timestamp&gt;</code>
+<ul>
+<li>Response is the same as the Indy Node <a path-0="hyperledger-indy.readthedocs.io"path-1="projects"path-2="node"path-3="en"path-4="latest"path-5="requests.html#get-revoc-reg"href="https://hyperledger-indy.readthedocs.io/projects/node/en/latest/requests.html#get-revoc-reg" >GET_REVOC_REG Txn</a>.</li>
 </ul>
 </li>
 <li><code>?from=&lt;timestamp&gt;&amp;to=&lt;timestamp&gt;</code>
 <ul>
 <li>Response is the same as the Indy Node <a path-0="hyperledger-indy.readthedocs.io"path-1="projects"path-2="node"path-3="en"path-4="latest"path-5="requests.html#get-revoc-reg-delta"href="https://hyperledger-indy.readthedocs.io/projects/node/en/latest/requests.html#get-revoc-reg-delta" >GET_REVOC_REG_DELTA Txn</a></li>
-<li>As noted in the transaction documentation, the from parameter is optional.</li>
+<li>As noted in the transaction documentation, the <code>from</code> parameter is optional.</li>
 <li>If the <code>to</code> parameter is left off the current time is used for the <code>to</code> timestamp.</li>
 </ul>
 </li>
