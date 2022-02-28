@@ -100,7 +100,7 @@ Assuming values `sovrin` for the `namespace`, `123456` for `dest` and `789abc` f
 
 ##### Example Extended DIDDoc Item
 
-An example of a [[ref: NYM]]'s extended DIDDoc handling is provided below. In the example below, the `diddocContent` item adds a DIDcomm Messaging service endpoint to the resolved DIDDoc. Note that in the example, an `@context` item is included in the `diddocContent`, which causes the result DIDDoc to be a JSON-LD document, rather than plain JSON.
+An example of a [[ref: NYM]]'s extended DIDDoc handling is provided below. In the example below, the `diddocContent` item adds a DIDcomm service endpoint to the resolved DIDDoc. Note that in the example, an `@context` item is included in the `diddocContent`, which causes the result DIDDoc to be a JSON-LD document, rather than plain JSON.
 
 ::: example Extended DIDDoc Item example
 ```json
@@ -111,8 +111,9 @@ An example of a [[ref: NYM]]'s extended DIDDoc handling is provided below. In th
   ],
   "service": [
     {
-      "id": "did:indy:sovrin:123456#didcomm",
-      "type": "didcomm-messaging",
+      "id": "did:indy:sovrin:123456#did-communication",
+      "type": "did-communication",
+      "priority": 0,
       "serviceEndpoint": "https://example.com",
       "recipientKeys": [ "#verkey" ],
       "routingKeys": [ ]
@@ -144,11 +145,12 @@ Applying the DIDDoc assembly rules to the example above produces the following a
   ],
   "service": [
     {
-      "id": "did:indy:sovrin:123456#didcomm",
-      "type": "didcomm-messaging",
+      "id": "did:indy:sovrin:123456#did-communication",
+      "type": "did-communication",
+      "priority": 0,
       "serviceEndpoint": "https://example.com",
       "recipientKeys": [ "#verkey" ],
-      "routingKeys": []
+      "routingKeys": [ ]
     }
   ]
 }
@@ -174,9 +176,10 @@ If clients want to continue to retrieve and use the `endpoint` [[ref: ATTRIB]] t
   "@context" : [ "https://identity.foundation/didcomm-messaging/service-endpoint/v1" ],
   "service": [
     {
-      "id": "did:indy:<namespace>:<dest>#didcomm",
-      "type": "didcomm-messaging",
-      "serviceEndpoint": "<ENDPOINT>",
+      "id": "did:indy:sovrin:123456#did-communication",
+      "type": "did-communication",
+      "priority": 0,
+      "serviceEndpoint": "https://example.com",
       "recipientKeys": [ "#verkey" ],
       "routingKeys": [ ]
     }

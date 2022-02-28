@@ -426,7 +426,7 @@ self-certifying the identifier must be derived from the initial verkey associate
 </code></pre>
 </div>
 <h5 id="example-extended-diddoc-item"><a class="toc-anchor" href="#example-extended-diddoc-item" >§</a> Example Extended DIDDoc Item</h5>
-<p>An example of a <a class="term-reference" href="#term:nym">NYM</a>'s extended DIDDoc handling is provided below. In the example below, the <code>diddocContent</code> item adds a DIDcomm Messaging service endpoint to the resolved DIDDoc. Note that in the example, an <code>@context</code> item is included in the <code>diddocContent</code>, which causes the result DIDDoc to be a JSON-LD document, rather than plain JSON.</p>
+<p>An example of a <a class="term-reference" href="#term:nym">NYM</a>'s extended DIDDoc handling is provided below. In the example below, the <code>diddocContent</code> item adds a DIDcomm service endpoint to the resolved DIDDoc. Note that in the example, an <code>@context</code> item is included in the <code>diddocContent</code>, which causes the result DIDDoc to be a JSON-LD document, rather than plain JSON.</p>
 <div id="extended-diddoc-item-example" class="notice example"><a class="notice-link" href="#extended-diddoc-item-example">EXAMPLE</a><pre class="language-json"><code class="language-json"><span class="token property">"diddocContent"</span> <span class="token operator">:</span> <span class="token punctuation">{</span>
   <span class="token property">"@context"</span> <span class="token operator">:</span> <span class="token punctuation">[</span>
       <span class="token string">"https://www.w3.org/ns/did/v1"</span><span class="token punctuation">,</span>
@@ -434,8 +434,9 @@ self-certifying the identifier must be derived from the initial verkey associate
   <span class="token punctuation">]</span><span class="token punctuation">,</span>
   <span class="token property">"service"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
     <span class="token punctuation">{</span>
-      <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"did:indy:sovrin:123456#didcomm"</span><span class="token punctuation">,</span>
-      <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"didcomm-messaging"</span><span class="token punctuation">,</span>
+      <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"did:indy:sovrin:123456#did-communication"</span><span class="token punctuation">,</span>
+      <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"did-communication"</span><span class="token punctuation">,</span>
+      <span class="token property">"priority"</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
       <span class="token property">"serviceEndpoint"</span><span class="token operator">:</span> <span class="token string">"https://example.com"</span><span class="token punctuation">,</span>
       <span class="token property">"recipientKeys"</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">"#verkey"</span> <span class="token punctuation">]</span><span class="token punctuation">,</span>
       <span class="token property">"routingKeys"</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token punctuation">]</span>
@@ -463,11 +464,12 @@ self-certifying the identifier must be derived from the initial verkey associate
   <span class="token punctuation">]</span><span class="token punctuation">,</span>
   <span class="token property">"service"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
     <span class="token punctuation">{</span>
-      <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"did:indy:sovrin:123456#didcomm"</span><span class="token punctuation">,</span>
-      <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"didcomm-messaging"</span><span class="token punctuation">,</span>
+      <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"did:indy:sovrin:123456#did-communication"</span><span class="token punctuation">,</span>
+      <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"did-communication"</span><span class="token punctuation">,</span>
+      <span class="token property">"priority"</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
       <span class="token property">"serviceEndpoint"</span><span class="token operator">:</span> <span class="token string">"https://example.com"</span><span class="token punctuation">,</span>
       <span class="token property">"recipientKeys"</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">"#verkey"</span> <span class="token punctuation">]</span><span class="token punctuation">,</span>
-      <span class="token property">"routingKeys"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+      <span class="token property">"routingKeys"</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token punctuation">]</span>
     <span class="token punctuation">}</span>
   <span class="token punctuation">]</span>
 <span class="token punctuation">}</span>
@@ -484,9 +486,10 @@ self-certifying the identifier must be derived from the initial verkey associate
   <span class="token property">"@context"</span> <span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">"https://identity.foundation/didcomm-messaging/service-endpoint/v1"</span> <span class="token punctuation">]</span><span class="token punctuation">,</span>
   <span class="token property">"service"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
     <span class="token punctuation">{</span>
-      <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"did:indy:&lt;namespace>:&lt;dest>#didcomm"</span><span class="token punctuation">,</span>
-      <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"didcomm-messaging"</span><span class="token punctuation">,</span>
-      <span class="token property">"serviceEndpoint"</span><span class="token operator">:</span> <span class="token string">"&lt;ENDPOINT>"</span><span class="token punctuation">,</span>
+      <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"did:indy:sovrin:123456#did-communication"</span><span class="token punctuation">,</span>
+      <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"did-communication"</span><span class="token punctuation">,</span>
+      <span class="token property">"priority"</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+      <span class="token property">"serviceEndpoint"</span><span class="token operator">:</span> <span class="token string">"https://example.com"</span><span class="token punctuation">,</span>
       <span class="token property">"recipientKeys"</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">"#verkey"</span> <span class="token punctuation">]</span><span class="token punctuation">,</span>
       <span class="token property">"routingKeys"</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token punctuation">]</span>
     <span class="token punctuation">}</span>
