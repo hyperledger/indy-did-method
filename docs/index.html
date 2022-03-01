@@ -85,12 +85,20 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
 <div id="finalize-nym-glossary-entry" class="notice todo"><a class="notice-link" href="#finalize-nym-glossary-entry">TODO</a><p>finalize</p>
 </div>
 <dl>
-<dt><span id="term:attrib">ATTRIB</span></dt>
-<dd>A Hyperledger Indy ATTRIB (short for “attribute”) object extends a specific DID (respectively the <a class="term-reference" href="#term:nym">NYM</a>) of its owner with further information (attributes) and can be <a path-0="hyperledger-indy.readthedocs.io"path-1="projects"path-2="node"path-3="en"path-4="latest"path-5="requests.html#get-attrib"href="https://hyperledger-indy.readthedocs.io/projects/node/en/latest/requests.html#get-attrib" >read</a> from a Hyperledger Indy Node by any client. An ATTRIB object can only be <a path-0="hyperledger-indy.readthedocs.io"path-1="projects"path-2="node"path-3="en"path-4="latest"path-5="requests.html#attrib"href="https://hyperledger-indy.readthedocs.io/projects/node/en/latest/requests.html#attrib" >written</a> to a Hyperledger Indy network by an owner of the DID on that network.</dd>
-</dl>
-<div id="finalize-attrib-glossary-entry" class="notice todo"><a class="notice-link" href="#finalize-attrib-glossary-entry">TODO</a><p>finalize</p>
-</div>
-<dl>
+<dt><span id="term:attrib">ATTRIB</span> - <strong>Deprecated</strong></dt>
+<dd>
+<p>A Hyperledger Indy ATTRIB (short for “attribute”) object extends a specific DID (also known as <a class="term-reference" href="#term:nym">NYM</a>) of its owner with further information (attributes) and can be <a path-0="hyperledger-indy.readthedocs.io"path-1="projects"path-2="node"path-3="en"path-4="latest"path-5="requests.html#get-attrib"href="https://hyperledger-indy.readthedocs.io/projects/node/en/latest/requests.html#get-attrib" >read</a> from a Hyperledger Indy Node by any client. An ATTRIB object can only be <a path-0="hyperledger-indy.readthedocs.io"path-1="projects"path-2="node"path-3="en"path-4="latest"path-5="requests.html#attrib"href="https://hyperledger-indy.readthedocs.io/projects/node/en/latest/requests.html#attrib" >written</a> to a Hyperledger Indy network by an owner of the DID on that network.</p>
+</dd>
+<dd>
+<p>The use of ATTRIB is <strong>deprecated</strong> with the introduction of the <code>did:indy</code>
+DID Method. The only common use of ATTRIBs in Hyperledger Indy prior to
+<code>did:indy</code> was to define DIDDoc service endpoints for a DID. Since with
+<code>did:indy</code> such a service endpoint can be added directly to the DID (along with
+any other DIDDoc data) there is no need to continue the use of the older ATTRIB
+<code>endpoint</code> convention. While a Hyperledger Indy client (such as <a class="term-reference" href="#term:indy">Indy</a>) MAY continue to try to resolve an <code>endpoint</code> ATTRIB when there is no
+DIDDoc content in a resolved DID, the ongoing practice of using an ATTRIB for
+that or any other purpose is discouraged.</p>
+</dd>
 <dt><span id="term:schema">SCHEMA</span></dt>
 <dd>
 <p>A SCHEMA object is a template that defines a set of attribute(names) which are going to be used by issuers for issuance of <a path-0="www.w3.org"path-1="TR"path-2="vc-data-model"path-3=""href="https://www.w3.org/TR/vc-data-model/" >Verifiable Credentials</a> within a Hyperledger Indy network. SCHEMAs have a name, version and can be <a path-0="hyperledger-indy.readthedocs.io"path-1="projects"path-2="node"path-3="en"path-4="latest"path-5="transactions.html#schema"href="https://hyperledger-indy.readthedocs.io/projects/node/en/latest/transactions.html#schema" >written</a> to the ledger by any entity with proper permissions. Schemas can be <a path-0="hyperledger-indy.readthedocs.io"path-1="projects"path-2="node"path-3="en"path-4="latest"path-5="requests.html#get-schema"href="https://hyperledger-indy.readthedocs.io/projects/node/en/latest/requests.html#get-schema" >read</a>from a Hyperledger Indy Node by any client.</p>
@@ -133,6 +141,11 @@ credential validation and can be <a path-0="hyperledger-indy.readthedocs.io"path
 </dd>
 <dd>
 <p>Further details about Hyperledger Indy’s revocation process can be found <a path-0="hyperledger-indy.readthedocs.io"path-1="projects"path-2="hipe"path-3="en"path-4="latest"path-5="text"path-6="0011-cred-revocation"path-7="README.html"href="https://hyperledger-indy.readthedocs.io/projects/hipe/en/latest/text/0011-cred-revocation/README.html" >here</a>.</p>
+</dd>
+<dt><span id="term:indy-vdr">Indy VDR</span></dt>
+<dd>
+<p>Hyperledger Indy VDR (for “Verifiable Data Registry”) is an open source implementation of an Indy client/resolver for both DIDs and other Indy objects.
+The repository is called indy-vdr and can be found <a path-0="github.com"path-1="hyperledger"path-2="indy-vdr"href="https://github.com/hyperledger/indy-vdr" >here</a>.</p>
 </dd>
 </dl>
 <h2 id="differences-from-didsov"><a class="toc-anchor" href="#differences-from-didsov" >§</a> Differences from <code>did:sov</code></h2>
@@ -315,13 +328,11 @@ In later versions, we expect that the schema identifier will either be removed f
 <li>The remainder of the identifier is the identifier for the applicable Revocation Registry</li>
 </ul>
 <h4 id="attrib"><a class="toc-anchor" href="#attrib" >§</a> ATTRIB</h4>
-<p>DID URL: <a path-0="indyscan.io"path-1="tx"path-2="SOVRIN_MAINNET"path-3="domain"path-4="54743"href="https://indyscan.io/tx/SOVRIN_MAINNET/domain/54743" ><code>did:indy:sovrin:5nDyJVP1NrcPAttP3xwMB9/ATTRIB/&lt;raw&gt;</code></a>, where <code>&lt;raw&gt;</code> is the name of the JSON object that is the value of the <code>raw</code> <a class="term-reference" href="#term:attrib">ATTRIB</a> value. In the example linked at the start of this paragraph, the <code>&lt;raw&gt;</code> value would be <code>endpoint</code>.</p>
-<p>Response: Same as the Indy Node <a path-0="hyperledger-indy.readthedocs.io"path-1="projects"path-2="node"path-3="en"path-4="latest"path-5="requests.html#get-attrib"href="https://hyperledger-indy.readthedocs.io/projects/node/en/latest/requests.html#get-attrib" >GET_ATTRIB Txn</a>. Only the <code>raw</code> parameter form of the transaction is supported.</p>
-<p>Existing Identifier: <code>F72i3Y3Q4i466efjYJYCHM:1:b6bf...d9e</code></p>
-<ul>
-<li><code>1</code> is the enumerated object type</li>
-<li><code>b6bf...d9e</code> is an identifier for the <a class="term-reference" href="#term:attrib">ATTRIB</a>, likely a hash of the content</li>
-</ul>
+<p>No DID URL representation is defined for the Hyperledger Indy <a class="term-reference" href="#term:attrib">ATTRIB</a> object, as
+the use of the ATTRIB object is <strong>deprecated</strong> with the introduction of the
+<code>did:indy</code> DID Method. Where an ATTRIB might have been used in the past, an Indy
+client updated for <code>did:indy</code> should put the required data directly into the
+<code>diddocContent</code> item in a DID (NYM) update transaction.</p>
 <h2 id="finding-indy-ledgers"><a class="toc-anchor" href="#finding-indy-ledgers" >§</a> Finding Indy Ledgers</h2>
 <p>To connect and read or write from a Hyperledger Indy network instance, a client must have the configuration file (in Indy, called the “gensis” file) for the network. Given a <code>did:indy</code> DID (e.g. <code>did:indy:&lt;namespace&gt;:&lt;namespace identifier&gt;</code>), the Indy network instance on which the DID resides is known. However, there remains a challenge for the entity interested in resolving the DID—finding the genesis file for that network instance. The following documents two mechanisms resolvers can use to access required genesis files.</p>
 <h3 id="static"><a class="toc-anchor" href="#static" >§</a> Static</h3>
@@ -507,7 +518,7 @@ In later versions, we expect that the schema identifier will either be removed f
 <p>By default there is no key agreement section in an assembled DIDDoc. If the DID Controller wants a key agreement key in the DIDDoc, they must explicitly add it by including it in the <code>diddocContent</code>. For an ED25519 verification key, an X25519 key agreement key could be derived from the verkey (by the client), or a new key agreement key can be generated and used.</p>
 <h4 id="the-endpoint-attrib"><a class="toc-anchor" href="#the-endpoint-attrib" >§</a> The “endpoint” ATTRIB</h4>
 <p>Prior to the definition of this DID Method, a convention on Indy ledgers to associate an endpoint to a <a class="term-reference" href="#term:nym">NYM</a> involved adding an <a class="term-reference" href="#term:attrib">ATTRIB</a> ledger object with a <code>raw</code> value of contain the JSON for a name-value pair of <code>endpoint</code> and a URL endpoint, often an IP address.</p>
-<p>We recommend that anyone that is using that format prior to the availability of the <code>did:indy</code> DID Method update their <a class="term-reference" href="#term:nym">NYM</a> on the ledger to use the <code>diddocContent</code> item as soon as possible.</p>
+<p>We strongly encourage anyone using the &quot;ATTRIB <code>endpoint</code>&quot; convention to update their <a class="term-reference" href="#term:nym">NYM</a> on the ledger to use the <code>diddocContent</code> item as soon as possible, as the <a class="term-reference" href="#term:attrib">ATTRIB</a> is deprecated with the introduction of the <code>did:indy</code> DID Method.</p>
 <p>If a client retrieves a <a class="term-reference" href="#term:nym">NYM</a> that has a <code>diddocContent</code> data element, the client should assume that the DID Controller has made the <a class="term-reference" href="#term:attrib">ATTRIB</a> (if any) obsolete and the client SHOULD NOT retrieve the <a class="term-reference" href="#term:attrib">ATTRIB</a> associated with the DID.</p>
 <p>If clients want to continue to retrieve and use the <code>endpoint</code> <a class="term-reference" href="#term:attrib">ATTRIB</a> transaction associated with a <a class="term-reference" href="#term:nym">NYM</a>, we recommend that the endpoint value (along with <code>namespace</code> and <code>dest</code>) be used as if the following was the <code>diddocContent</code> item in the <a class="term-reference" href="#term:nym">NYM</a>.</p>
 <pre class="language-json"><code class="language-json"><span class="token property">"diddocContent"</span> <span class="token operator">:</span> <span class="token punctuation">{</span>
