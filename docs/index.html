@@ -306,19 +306,20 @@ In later versions, we expect that the schema identifier will either be removed f
 <ul>
 <li>None
 <ul>
-<li>Response is the same as the Indy Node <a path-0="hyperledger-indy.readthedocs.io"path-1="projects"path-2="node"path-3="en"path-4="latest"path-5="requests.html#get-revoc-reg"href="https://hyperledger-indy.readthedocs.io/projects/node/en/latest/requests.html#get-revoc-reg" >GET_REVOC_REG Txn</a> with the current time used for the timestamp.</li>
+<li>Response is the same as the Indy Node <a path-0="hyperledger-indy.readthedocs.io"path-1="projects"path-2="node"path-3="en"path-4="latest"path-5="requests.html#get-revoc-reg"href="https://hyperledger-indy.readthedocs.io/projects/node/en/latest/requests.html#get-revoc-reg" >GET_REVOC_REG Txn</a> with the current time used for the <code>versionTime</code>.</li>
 </ul>
 </li>
-<li><code>?versionTime=&lt;timestamp&gt;</code>
+<li><code>?versionTime=&lt;XML Datetime&gt;</code>
 <ul>
 <li>Response is the same as the Indy Node <a path-0="hyperledger-indy.readthedocs.io"path-1="projects"path-2="node"path-3="en"path-4="latest"path-5="requests.html#get-revoc-reg"href="https://hyperledger-indy.readthedocs.io/projects/node/en/latest/requests.html#get-revoc-reg" >GET_REVOC_REG Txn</a>.</li>
 </ul>
 </li>
-<li><code>?from=&lt;timestamp&gt;&amp;to=&lt;timestamp&gt;</code>
+<li><code>?from=&lt;XML Datetime&gt;&amp;to=&lt;XML Datetime&gt;</code>
 <ul>
 <li>Response is the same as the Indy Node <a path-0="hyperledger-indy.readthedocs.io"path-1="projects"path-2="node"path-3="en"path-4="latest"path-5="requests.html#get-revoc-reg-delta"href="https://hyperledger-indy.readthedocs.io/projects/node/en/latest/requests.html#get-revoc-reg-delta" >GET_REVOC_REG_DELTA Txn</a></li>
-<li>As noted in the transaction documentation, the <code>from</code> parameter is optional.</li>
-<li>If the <code>to</code> parameter is left off the current time is used for the <code>to</code> timestamp.</li>
+<li>At least one of the parameters has to be set.</li>
+<li>If only <code>from</code> is set, then <code>to</code> is implicitly set to the current time.</li>
+<li>If only <code>to</code> is set, then all deltas up to this time are returned.</li>
 </ul>
 </li>
 </ul>
@@ -582,7 +583,7 @@ client updated for <code>did:indy</code> should put the required data directly i
 <h4 id="did-versions"><a class="toc-anchor" href="#did-versions" >§</a> DID Versions</h4>
 <p>In resolving a <code>did:indy</code> DID, the DID resolution query parameters <code>versionId</code> and <code>versionTime</code> may be used. When used, process to retrieve the <a class="term-reference" href="#term:nym">NYM</a> from the ledger (step 3 above) is different.</p>
 <p>If the parameter <code>versionId</code> is used, the value must be an Indy ledger <code>seqno</code> for the requested <a class="term-reference" href="#term:nym">NYM</a> on the queried Indy ledger. Instead of using the <code>GET_NYM</code> call, the Indy <code>GET_TXN</code> call is used, passing in the <code>seqno</code>. The result is checked that it is the <a class="term-reference" href="#term:nym">NYM</a> matching the DID namespace identifier. If so the call is considered to have failed. Either way, the process continues at Step 4.</p>
-<p>If the parameter <code>versionTime</code> is used, the <code>GET_NYM</code> transaction is called with the <code>versionTime</code> timestamp as an additional parameter. The Indy ledger code tries to find the instance of the requested <a class="term-reference" href="#term:nym">NYM</a> that was active at that time (using ledger transaction timestamps) and returns it (if found) or the call fails. Either way, the process continues at Step 4.</p>
+<p>If the parameter <code>versionTime</code> is used, the <code>GET_NYM</code> transaction is called with the appropriate <code>versionTime</code> timestamp as an additional parameter. The <code>versionTime</code> parameter MUST be a XML datetime, as defined in the <a path-0="www.w3.org"path-1="TR"path-2="did-core"path-3="#did-parameters"href="https://www.w3.org/TR/did-core/#did-parameters" >DID Core specification</a>, and will be converted into a POSIX timestamp by the resolver. The Indy ledger code tries to find the instance of the requested <a class="term-reference" href="#term:nym">NYM</a> that was active at that time (using ledger transaction timestamps) and returns it (if found) or the call fails. Either way, the process continues at Step 4.</p>
 <h3 id="deactivate"><a class="toc-anchor" href="#deactivate" >§</a> Deactivate</h3>
 <p>Deactivation of a <code>did:indy</code> DID is done by setting the <a class="term-reference" href="#term:nym">NYM</a> verkey to null. Once done, the DIDDoc is not found (per
 the <a href="#diddoc-assembly-steps" >DIDDoc Assembly Rules</a>) and the <a class="term-reference" href="#term:nym">NYM</a> cannot be updated again.</p>

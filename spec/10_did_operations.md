@@ -232,7 +232,7 @@ In resolving a `did:indy` DID, the DID resolution query parameters `versionId` a
 
 If the parameter `versionId` is used, the value must be an Indy ledger `seqno` for the requested [[ref: NYM]] on the queried Indy ledger. Instead of using the `GET_NYM` call, the Indy `GET_TXN` call is used, passing in the `seqno`. The result is checked that it is the [[ref: NYM]] matching the DID namespace identifier. If so the call is considered to have failed. Either way, the process continues at Step 4.
 
-If the parameter `versionTime` is used, the `GET_NYM` transaction is called with the `versionTime` timestamp as an additional parameter. The Indy ledger code tries to find the instance of the requested [[ref: NYM]] that was active at that time (using ledger transaction timestamps) and returns it (if found) or the call fails. Either way, the process continues at Step 4.
+If the parameter `versionTime` is used, the `GET_NYM` transaction is called with the appropriate `versionTime` timestamp as an additional parameter. The `versionTime` parameter MUST be a XML datetime, as defined in the [DID Core specification](https://www.w3.org/TR/did-core/#did-parameters), and will be converted into a POSIX timestamp by the resolver. The Indy ledger code tries to find the instance of the requested [[ref: NYM]] that was active at that time (using ledger transaction timestamps) and returns it (if found) or the call fails. Either way, the process continues at Step 4.
 
 ### Deactivate
 

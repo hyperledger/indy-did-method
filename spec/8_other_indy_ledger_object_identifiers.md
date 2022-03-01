@@ -102,18 +102,21 @@ DID URL: [`did:indy:sovrin:5nDyJVP1NrcPAttP3xwMB9/anoncreds/v0/REV_REG_ENTRY/564
 The DID URL resolution response depends on the query parameters used, as follows:
 
 - None
-  - Response is the same as the Indy Node [GET_REVOC_REG Txn](https://hyperledger-indy.readthedocs.io/projects/node/en/latest/requests.html#get-revoc-reg) with the current time used for the timestamp.
-- `?versionTime=<timestamp>`
+  - Response is the same as the Indy Node [GET_REVOC_REG Txn](https://hyperledger-indy.readthedocs.io/projects/node/en/latest/requests.html#get-revoc-reg) with the current time used for the `versionTime`.
+- `?versionTime=<XML Datetime>`
   - Response is the same as the Indy Node [GET_REVOC_REG Txn](https://hyperledger-indy.readthedocs.io/projects/node/en/latest/requests.html#get-revoc-reg).
-- `?from=<timestamp>&to=<timestamp>`
+- `?from=<XML Datetime>&to=<XML Datetime>`
   - Response is the same as the Indy Node [GET_REVOC_REG_DELTA Txn](https://hyperledger-indy.readthedocs.io/projects/node/en/latest/requests.html#get-revoc-reg-delta)
-  - As noted in the transaction documentation, the `from` parameter is optional.
-  - If the `to` parameter is left off the current time is used for the `to` timestamp.
+  - At least one of the parameters has to be set. 
+  - If only `from` is set, then `to` is implicitly set to the current time.
+  - If only `to` is set, then all deltas up to this time are returned.
 
 Existing Identifier: `5:5nDyJVP1NrcPAttP3xwMB9:4:5nDyJVP1NrcPAttP3xwMB9:3:CL:56495:npdb:CL_ACCUM:TAG1`
 
 - `5` is the enumerated object type
 - The remainder of the identifier is the identifier for the applicable Revocation Registry
+
+
 
 #### ATTRIB
 
