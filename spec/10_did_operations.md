@@ -32,7 +32,7 @@ When using the old Indy SDK convention of using the first 16 bytes of the verkey
 
 The DIDDoc returned when a `did:indy` DID is resolved is not directly stored in an Indy ledger document. Instead, the DIDDoc must be assembled from data elements in the Indy `NYM` object based on a series of steps. When a [[ref: NYM]] is created or updated the ledger MUST assemble the DIDDoc (following the steps) and validate the DIDDoc. As well, an Indy DID resolver will receive from the ledger the [[ref: NYM]] from the ledger and the non-validation steps must be followed to assemble the DIDDoc for the resolved DID.
 
-Since the assembly validation may change between writing the DID and resolving it (notably, step 3.2), a client resolving a DID SHOULD NOT perform the validation steps.
+If the `diddocContent` item contains a `@context` item, the resulting DIDDoc is considered JSON-LD. It is the responsibility of the content creator to ensure that it is valid JSON-LD.
 
 #### DIDDoc Assembly Steps
 
@@ -45,10 +45,9 @@ The following are the steps for assembling a DIDDoc from its inputs.
     2. If there is no `diddocContent` item in the [[ref: NYM]], assembly is complete; return the DIDDoc and a success status.
 3. If the `diddocContent` item is included in the [[ref: NYM]], it is verified and merged into the DIDDoc.
     1. The `diddocContent` item MUST NOT have an `id` item. If found, exit the assembly process, returning an error.
-    2. If the `diddocContent` item contains a `@context` item, the DIDDoc is assumed to be JSON-LD, and the `@context` element MUST include the current DID Core JSON-LD context. If it does not, exit the assmebly process and return an error.
-    3. The `diddocContent` MUST NOT contain an item with the same `id` values as those from the [[ref: NYM]]-generated DIDDoc. If a matching `id` is found, exit and return an error.
-    4. If the `diddocContent` item contains `verificationMethod` and/or `authentication` items, these MUST be arrays. Merge the entries into the respective arrays of the DIDDoc.
-    5. Add the other items of the `diddocContent` to the DIDDoc.
+    2. The `diddocContent` MUST NOT contain an item with the same `id` values as those from the [[ref: NYM]]-generated DIDDoc. If a matching `id` is found, exit and return an error.
+    3. If the `diddocContent` item contains `verificationMethod` and/or `authentication` items, these MUST be arrays. Merge the entries into the respective arrays of the DIDDoc.
+    4. Add the other items of the `diddocContent` to the DIDDoc.
 4. The resulting DIDDoc text must be valid JSON. If not JSON, exit and return an error.
 5. The resulting JSON must be a valid DIDDoc. Perform a `<to be determined>` validation process. If not a DIDDoc, exit and return an error.
 ::: warning is this the correct process name
@@ -123,7 +122,7 @@ An example of a [[ref: NYM]]'s extended DIDDoc handling is provided below. In th
 ```
 :::
 
-Applying the DIDDoc assembly rules to the example above produces the following assembled, valid JSON-LD DIDDoc:
+Applying the DIDDoc assembly rules to the example above, the following assembled DIDDoc is produced (it is the responsibility of the content creator to ensure that the DIDDoc is valid JSON-LD):
 
 ::: example assembled Extended JSON-LD DIDDoc Item  example
 ```json
