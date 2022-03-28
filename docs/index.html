@@ -230,6 +230,8 @@ self-certifying the identifier must be derived from the initial verkey associate
 <li><code>&lt;object-type-identifier&gt;</code> an object type unique identifier defined by Indy by object type.</li>
 </ul>
 <p>The data returned from resolving such DID URLs is the ledger object and relevant state proof; the same data returned from the Indy Node read object transactions, such as the <a path-0="hyperledger-indy.readthedocs.io"path-1="projects"path-2="node"path-3="en"path-4="latest"path-5="requests.html#get-schema"href="https://hyperledger-indy.readthedocs.io/projects/node/en/latest/requests.html#get-schema" >GET_SCHEMA</a> transaction, and dependent on the type of the object.</p>
+<p>Since indy allows special characters within the names of the different ledger objects, percent encoding according to <a path-0="datatracker.ietf.org"path-1="doc"path-2="html"path-3="rfc3986#section-2"href="https://datatracker.ietf.org/doc/html/rfc3986#section-2" >Section 2 of RFC3986</a> has to be applied to access these objects via DID URLs.</p>
+<p>While there are no restrictions regarding the used characters, we strongly encourage avoiding special characters in the names of ledger objects.</p>
 <p>The following sections cover each ledger object type, providing:</p>
 <ul>
 <li>an example DID URL identifier,</li>

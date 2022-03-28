@@ -18,6 +18,10 @@ The components of the DID URL are:
 
 The data returned from resolving such DID URLs is the ledger object and relevant state proof; the same data returned from the Indy Node read object transactions, such as the [GET_SCHEMA](https://hyperledger-indy.readthedocs.io/projects/node/en/latest/requests.html#get-schema) transaction, and dependent on the type of the object.
 
+Since indy allows special characters within the names of the different ledger objects, percent encoding according to [Section 2 of RFC3986](https://datatracker.ietf.org/doc/html/rfc3986#section-2) has to be applied to access these objects via DID URLs.
+
+While there are no restrictions regarding the used characters, we strongly encourage avoiding special characters in the names of ledger objects.
+
 The following sections cover each ledger object type, providing:
 
 - an example DID URL identifier,
