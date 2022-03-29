@@ -2,15 +2,11 @@
 
 ### Creation
 
-Creation of a `did:indy` DID is performed by an authorized entity executing a `NYM` ledger transaction on a given Indy network. An Indy [[ref: NYM]] transaction includes an identifier (`dest`), an ED25519 verification key (`verkey`) and an optional JSON item (`diddocContent`). The [[ref: NYM]] is written to a specific Indy network with a given `namespace`. The following validation MUST be performed prior to executing the transaction to create the DID:
+Creation of a `did:indy` DID is performed by an authorized entity executing a `NYM` ledger transaction on a given Indy network. An Indy [[ref: NYM]] transaction includes an identifier (`dest`), an ED25519 verification key (`verkey`), an optional JSON item (`diddocContent`), and an optional NYM transaction `version`. The [[ref: NYM]] is written to a specific Indy network with a given `namespace`. The following validation MUST be performed prior to executing the transaction to create the DID:
 
 - Based on the configured authorization rules of the specific Indy ledger, the transaction may have to be signed by others, such as a Trustee or Endorser. If transaction is not authorized, the transaction MUST be rejected and an error returned to the client.
 
-- A `did:indy` DID MUST be self-certifying by having the namespace identifier component of the DID (last element) derived from the initial public key of the DID, as follows:
-
-  - The base58 encoding of the first 16 bytes of the SHA256 of the Verification Method public key (`did = Base58(Truncate_msb(16(SHA256(publicKey))))`)
-
-- The Indy ledger MUST verify the relationship between the namespace identifier component of the DID and the initial public key (verkey). If the relationship between the data elements fails verification, the transaction MUST be rejected and an error returned to the client.
+- The Indy ledger MUST verify the relationship between the namespace identifier component of the DID and the initial public key (verkey) according to the NYM transaction `version` number described [below](#nym-transaction-version). If the relationship between the data elements fails verification, the transaction MUST be rejected and an error returned to the client.
 
 - The [[ref: NYM]] transaction requires that the transaction to be written is signed by the DID controller. The ledger MUST verify the signature using the [[ref: NYM]] `verkey`. If the signature can not be validated, the transaction MUST be rejected and an error returned to the client.
 
@@ -21,6 +17,17 @@ Although the DIDDoc is returned from the DIDDoc assembly and verification proces
 Once the validation checks are completed, the [[ref: NYM]] transaction is written to the Indy distributed ledger. If the [[ref: NYM]] write operation fails, an error is returned to the client.
 
 On successfully writing the transaction to the Indy distributed ledger a success status is returned to the client.
+
+#### NYM Transaction Version
+
+The NYM transaction `version` specifies the required level of validation of the relationship between the namespace identifier component of the DID and the intial public key (verkey). This field is optional, but if the NYM transaction `version` is provided, it must be set upon creation and cannot be updated. The accepted values are as follows:
+
+  - 0 or NYM transaction `version` is not set: No validation of namespace identifier and initial verkey binding is performed
+  - 1: Validation is performed according to the `did:sov` method, in which the DID must be the first 16 bytes of the Verification Method public key.
+  - 2: Validation is performed according to the `did:indy`, in which the namespace identifier component of the DID (last element) is derived from the initial public key of the DID, using the base58 encoding of the first 16 bytes of the SHA256 of the Verification Method public key (`did = Base58(Truncate_msb(16(SHA256(publicKey))))`). This DID is considered self-certifying.
+
+The NYM transaction `version` is distinct from the DID version described [below](#did-versions), which allows for resolution of DIDs at the specified `versionId` or `versionTime`.
+
 
 #### Backwards Compatibility
 
@@ -39,7 +46,6 @@ If the `diddocContent` item contains a `@context` item, the resulting DIDDoc is 
 The following are the steps for assembling a DIDDoc from its inputs.
 
 1. If the `verkey` is `null` the DID has been deactivated, and no DIDDoc is created. Assembly is complete; return a success status.
-    1. *Note: On creation, the operation would have failed on the "self-certifying DID" validation and not reached this point in the process.*
 2. The Indy network instance `namespace`, the [[ref: NYM]] `dest` and the [[ref: NYM]] `verkey` items are merged into a text template to produce a base DIDDoc.
     1. See the template in the [Base DIDDoc Template](#base-diddoc-template) section of this document.
     2. If there is no `diddocContent` item in the [[ref: NYM]], assembly is complete; return the DIDDoc and a success status.

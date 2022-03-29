@@ -17,7 +17,7 @@ The compromise of stored data on the ledger is prevented by the distributed, sig
 DID Documents can be resolved from a DID, however the DID subject can choose to include or exclude service endpoints that expose itself to unsolicited traffic. The nodes of the ledger itself are exposed to any unwanted traffic as explained in the Denial-of-Service section.
 
 ### Misattribution
-DIDs are self-certifying and immutable, the control flow of the ledger nodes prevents any misattributation given that it is implemented correctly.
+DIDs of NYM transaction `version` 2 are self-certifying and immutable, the control flow of the ledger nodes prevents any misattributation given that it is implemented correctly. It is the responsibility the creator of the DIDs to elect to use the self-certification feature.
 
 ### Correlation
 The Hyperledger Indy ecosystem with Anoncreds 1 was designed to prevent correlation by design. No DIDs nor any data or credentials of natural persons are stored on the ledger, the revocation system guarantees a high degree of anonymity.

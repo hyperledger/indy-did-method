@@ -152,7 +152,7 @@ The repository is called indy-vdr and can be found <a path-0="github.com"path-1=
 <p>Early instances of Indy Networks used the <code>did:sov</code> DID Method. The following summarizes the differences between that <code>did:sov</code> and <code>did:indy</code>.</p>
 <ul>
 <li>A <code>did:indy</code> DID includes a namespace component that enables resolving a DID to a specific instance of an Indy network (e.g. Sovrin, IDUnion, etc.).</li>
-<li><code>did:indy</code> DIDs MUST be self-certifying, and that restriction MUST be enforced by the ledger.</li>
+<li><code>did:indy</code> DID validation is determined by NYM transaction <code>version</code>, as described in the <a href="#nym-transaction-version" >DID Creation</a> section. These restrictions MUST be enforced by the ledger.</li>
 <li>Identifiers for Indy ledger objects other than <a class="term-reference" href="#term:nym">NYM</a>s are adjusted to contain a namespace component.</li>
 <li>The specification includes rules for transforming a <a class="term-reference" href="#term:nym">NYM</a> into a DIDDoc that meets the DID Core Specification.
 <ul>
@@ -190,9 +190,7 @@ The repository is called indy-vdr and can be found <a path-0="github.com"path-1=
 <li><strong>DID</strong>: the hardcoded string <code>did:</code> to indicate the identifier is a DID</li>
 <li><strong>DID Indy Method</strong>: the hardcoded string <code>indy:</code> indicating that the identifier uses this DID Method specification.</li>
 <li><strong>DID Indy Namespace</strong>: a string that identifies the name of the primary Indy ledger, followed by a <code>:</code>. The namespace string may optionally have a secondary ledger name prefixed by a <code>:</code> following the primary name. If there is no secondary ledger element, the DID resides on the primary ledger, else it resides on the secondary ledger. By convention, the primary is a production ledger while the secondary ledgers are non-production ledgers (e.g. staging, test, development) associated with the primary ledger. Examples include, <code>sovrin</code>, <code>sovrin:staging</code> and <code>idunion</code>.</li>
-<li><strong>Namespace Identifier</strong>: a self-certifying identifier unique to the given DID Indy namespace. To be
-self-certifying the identifier must be derived from the initial verkey associated with the identifier. See the
-<a href="#creation" >DID Creation</a> section of this document for the derivation details.</li>
+<li><strong>Namespace Identifier</strong>: a identifier unique to the given DID Indy namespace. The identifier may be self-certifying, meaning that the identifier is derived from the initial verkey associated with the identifier. See the <a href="#nym-transaction-version" >DID Creation</a> section of this document for the derivation details.</li>
 </ul>
 <p>The components are assembled as follows:</p>
 <p><code>did:indy:&lt;namespace&gt;:&lt;namespace identifier&gt;</code></p>
@@ -373,19 +371,13 @@ client updated for <code>did:indy</code> should put the required data directly i
 <p>Any disputes about the handling of PRs submitted to the repo should be escalated through the Indy Community (via the #indy channel on Hyperledger chat and/or at the <a path-0="wiki.hyperledger.org"path-1="display"path-2="indy"path-3="Indy+Contributors+Meeting"href="https://wiki.hyperledger.org/display/indy/Indy+Contributors+Meeting" >Indy Contributors</a> call or its successor). If the issue is not resolved at the Indy level, the issue should be escalated to Hyperledger leadership (the Executive Director or the Technical Steering Committee).</p>
 <h2 id="did-operations"><a class="toc-anchor" href="#did-operations" >§</a> DID Operations</h2>
 <h3 id="creation"><a class="toc-anchor" href="#creation" >§</a> Creation</h3>
-<p>Creation of a <code>did:indy</code> DID is performed by an authorized entity executing a <code>NYM</code> ledger transaction on a given Indy network. An Indy <a class="term-reference" href="#term:nym">NYM</a> transaction includes an identifier (<code>dest</code>), an ED25519 verification key (<code>verkey</code>) and an optional JSON item (<code>diddocContent</code>). The <a class="term-reference" href="#term:nym">NYM</a> is written to a specific Indy network with a given <code>namespace</code>. The following validation MUST be performed prior to executing the transaction to create the DID:</p>
+<p>Creation of a <code>did:indy</code> DID is performed by an authorized entity executing a <code>NYM</code> ledger transaction on a given Indy network. An Indy <a class="term-reference" href="#term:nym">NYM</a> transaction includes an identifier (<code>dest</code>), an ED25519 verification key (<code>verkey</code>), an optional JSON item (<code>diddocContent</code>), and an optional NYM transaction <code>version</code>. The <a class="term-reference" href="#term:nym">NYM</a> is written to a specific Indy network with a given <code>namespace</code>. The following validation MUST be performed prior to executing the transaction to create the DID:</p>
 <ul>
 <li>
 <p>Based on the configured authorization rules of the specific Indy ledger, the transaction may have to be signed by others, such as a Trustee or Endorser. If transaction is not authorized, the transaction MUST be rejected and an error returned to the client.</p>
 </li>
 <li>
-<p>A <code>did:indy</code> DID MUST be self-certifying by having the namespace identifier component of the DID (last element) derived from the initial public key of the DID, as follows:</p>
-<ul>
-<li>The base58 encoding of the first 16 bytes of the SHA256 of the Verification Method public key (<code>did = Base58(Truncate_msb(16(SHA256(publicKey))))</code>)</li>
-</ul>
-</li>
-<li>
-<p>The Indy ledger MUST verify the relationship between the namespace identifier component of the DID and the initial public key (verkey). If the relationship between the data elements fails verification, the transaction MUST be rejected and an error returned to the client.</p>
+<p>The Indy ledger MUST verify the relationship between the namespace identifier component of the DID and the initial public key (verkey) according to the NYM transaction <code>version</code> number described <a href="#nym-transaction-version" >below</a>. If the relationship between the data elements fails verification, the transaction MUST be rejected and an error returned to the client.</p>
 </li>
 <li>
 <p>The <a class="term-reference" href="#term:nym">NYM</a> transaction requires that the transaction to be written is signed by the DID controller. The ledger MUST verify the signature using the <a class="term-reference" href="#term:nym">NYM</a> <code>verkey</code>. If the signature can not be validated, the transaction MUST be rejected and an error returned to the client.</p>
@@ -397,6 +389,14 @@ client updated for <code>did:indy</code> should put the required data directly i
 <p>Although the DIDDoc is returned from the DIDDoc assembly and verification process, the DIDDoc is not used further by the ledger.</p>
 <p>Once the validation checks are completed, the <a class="term-reference" href="#term:nym">NYM</a> transaction is written to the Indy distributed ledger. If the <a class="term-reference" href="#term:nym">NYM</a> write operation fails, an error is returned to the client.</p>
 <p>On successfully writing the transaction to the Indy distributed ledger a success status is returned to the client.</p>
+<h4 id="nym-transaction-version"><a class="toc-anchor" href="#nym-transaction-version" >§</a> NYM Transaction Version</h4>
+<p>The NYM transaction <code>version</code> specifies the required level of validation of the relationship between the namespace identifier component of the DID and the intial public key (verkey). This field is optional, but if the NYM transaction <code>version</code> is provided, it must be set upon creation and cannot be updated. The accepted values are as follows:</p>
+<ul>
+<li>0 or NYM transaction <code>version</code> is not set: No validation of namespace identifier and initial verkey binding is performed</li>
+<li>1: Validation is performed according to the <code>did:sov</code> method, in which the DID must be the first 16 bytes of the Verification Method public key.</li>
+<li>2: Validation is performed according to the <code>did:indy</code>, in which the namespace identifier component of the DID (last element) is derived from the initial public key of the DID, using the base58 encoding of the first 16 bytes of the SHA256 of the Verification Method public key (<code>did = Base58(Truncate_msb(16(SHA256(publicKey))))</code>). This DID is considered self-certifying.</li>
+</ul>
+<p>The NYM transaction <code>version</code> is distinct from the DID version described <a href="#did-versions" >below</a>, which allows for resolution of DIDs at the specified <code>versionId</code> or <code>versionTime</code>.</p>
 <h4 id="backwards-compatibility"><a class="toc-anchor" href="#backwards-compatibility" >§</a> Backwards Compatibility</h4>
 <p>Prior to <code>did:indy</code>, the unenforced convention in the Indy SDK was to use the following to demonstrate the relationship between the DID and its initial verkey: <code>For an Ed25519 key: Convert into Base58char the first 16 bytes of the 256 bit public key (verkey).</code> If the <code>did:indy</code> approach to verifying the relationship between the DID and its initial verkey fail, a client resolving a DID MAY attempt to verify the relationship using the old Indy SDK convention.</p>
 <p>When using the old Indy SDK convention of using the first 16 bytes of the verkey, related convention allowed for the placement of a shortened verkey (prefixed with <code>~</code>) in the NYM <code>verkey</code> field, such that the full verkey was dynamically generated by combining the DID and shortened verkey. That convention is <strong>NOT</strong> used in “did:indy”, but client resolvers using DIDs created prior to <code>did:indy</code> MUST detect and convert shortened verkeys to full verkeys as necessary.</p>
@@ -406,11 +406,7 @@ client updated for <code>did:indy</code> should put the required data directly i
 <h4 id="diddoc-assembly-steps"><a class="toc-anchor" href="#diddoc-assembly-steps" >§</a> DIDDoc Assembly Steps</h4>
 <p>The following are the steps for assembling a DIDDoc from its inputs.</p>
 <ol>
-<li>If the <code>verkey</code> is <code>null</code> the DID has been deactivated, and no DIDDoc is created. Assembly is complete; return a success status.
-<ol>
-<li><em>Note: On creation, the operation would have failed on the “self-certifying DID” validation and not reached this point in the process.</em></li>
-</ol>
-</li>
+<li>If the <code>verkey</code> is <code>null</code> the DID has been deactivated, and no DIDDoc is created. Assembly is complete; return a success status.</li>
 <li>The Indy network instance <code>namespace</code>, the <a class="term-reference" href="#term:nym">NYM</a> <code>dest</code> and the <a class="term-reference" href="#term:nym">NYM</a> <code>verkey</code> items are merged into a text template to produce a base DIDDoc.
 <ol>
 <li>See the template in the <a href="#base-diddoc-template" >Base DIDDoc Template</a> section of this document.</li>
@@ -655,7 +651,7 @@ Man-in-the-Middle attacks for the inter-node communication is also impossible, a
 <p>For all write operations that alter the ledger data(Create, Update, Deactivate) the appropriate signatures are needed, where the DIDs and <code>verkey</code>s of the signatories must be one the ledger. The client signs the body of the <a path-0="github.com"path-1="hyperledger"path-2="indy-node"path-3="blob"path-4="master"path-5="docs"path-6="source"path-7="requests.md#reply-structure-for-write-requests"href="https://github.com/hyperledger/indy-node/blob/master/docs/source/requests.md#reply-structure-for-write-requests" >write request</a> (<code>txn</code>), depending on the configured leder rules, some transactions might require signatures from multiple DIDs. The Indy ledger processes the signed write request and the software enforces the integrity protection by checking the validity of the given signatures and their authorization. No authentication or authoriazion is required for read requests.</p>
 <p>As Indy currently only provides a single <code>verkey</code> for authentication, this exposes a risk of loss of control if the  private key for the DID Controller is lost.</p>
 <h3 id="uniqueness-of-dids"><a class="toc-anchor" href="#uniqueness-of-dids" >§</a> Uniqueness of DIDs</h3>
-<p>DIDs on the Indy ledger are self-certifying, derived from the initial <code>verkey</code> of an Ed25519 key pair, which makes them extremely likely to be unique. Any attempt to write the same DID would only work if the signature matched (e.g. if the seed to create the DID had been lost so the literal same DID was attempted to be written), which would result in no change to the ledger, and goes against assumption of the DID Controller not protecting their seed/private key.</p>
+<p>DIDs on the Indy ledger have the option to be self-certifying (NYM transaction <code>version</code> 2), derived from the initial <code>verkey</code> of an Ed25519 key pair, which makes them extremely likely to be unique. Any attempt to write the same DID would only work if the signature matched (e.g. if the seed to create the DID had been lost so the literal same DID was attempted to be written), which would result in no change to the ledger, and goes against assumption of the DID Controller not protecting their seed/private key. If the signatures do not match in the case of a collision of DIDs, the NYM transaction would be rejected. DIDs of NYM transaction <code>version</code> 1 are also very likely to be unique, but a collision is possible. DIDs that have no validation of namespace identifier and initial verkey binding (NYM transaction <code>version</code> 0 or without a NYM transaction <code>version</code>) have no guarantees on uniqueness. While DIDs can have different levels of validation as determined by the creator (see <a href="#creation" >DID Creation</a> section for details), self-certification of DIDs will be enforced in the future.</p>
 <h3 id="endpoint-authentication"><a class="toc-anchor" href="#endpoint-authentication" >§</a> Endpoint authentication</h3>
 <p>No endpoint authentication is used other than the trusted node keys from the genesis files.</p>
 <h3 id="protection-of-data"><a class="toc-anchor" href="#protection-of-data" >§</a> Protection of data</h3>
@@ -678,7 +674,7 @@ Furthermore, authors of read and write requests can be surveillanced by their co
 <h3 id="unsolicited-traffic"><a class="toc-anchor" href="#unsolicited-traffic" >§</a> Unsolicited Traffic</h3>
 <p>DID Documents can be resolved from a DID, however the DID subject can choose to include or exclude service endpoints that expose itself to unsolicited traffic. The nodes of the ledger itself are exposed to any unwanted traffic as explained in the Denial-of-Service section.</p>
 <h3 id="misattribution"><a class="toc-anchor" href="#misattribution" >§</a> Misattribution</h3>
-<p>DIDs are self-certifying and immutable, the control flow of the ledger nodes prevents any misattributation given that it is implemented correctly.</p>
+<p>DIDs of NYM transaction <code>version</code> 2 are self-certifying and immutable, the control flow of the ledger nodes prevents any misattributation given that it is implemented correctly. It is the responsibility the creator of the DIDs to elect to use the self-certification feature.</p>
 <h3 id="correlation"><a class="toc-anchor" href="#correlation" >§</a> Correlation</h3>
 <p>The Hyperledger Indy ecosystem with Anoncreds 1 was designed to prevent correlation by design. No DIDs nor any data or credentials of natural persons are stored on the ledger, the revocation system guarantees a high degree of anonymity.
 However, DID’s on the ledger, used by organizations, enable correlation by the pseudonymous DID iteself or through data like service endpoints from the resolved DID Document as described in the DID-Core specification. Ledger nodes are prohibited to collect any metadata of (read) requests to the ledger to prevent correlation.</p>
@@ -769,6 +765,7 @@ However, DID’s on the ledger, used by organizations, enable correlation by the
 <ul>
 <li><a href="#creation" >Creation</a>
 <ul>
+<li><a href="#nym-transaction-version" >NYM Transaction Version</a></li>
 <li><a href="#backwards-compatibility" >Backwards Compatibility</a></li>
 <li><a href="#diddoc-assembly-and-verification" >DIDDoc Assembly and Verification</a></li>
 <li><a href="#diddoc-assembly-steps" >DIDDoc Assembly Steps</a></li>
