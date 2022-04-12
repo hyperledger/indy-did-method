@@ -23,6 +23,6 @@ Previous approaches to resolving Indy ledger objects into DIDDocs required the c
 
 ### Cross-Ledger Object References
 
-The [[ref: NYM]] controller of all objects on an Indy ledger MUST reside on the same Indy ledger as the object. Thus, the DID (e.g. the Indy [[ref: NYM]]) of the Issuer of a verifiable credential type must reside on the same ledger as the [[ref: CLAIM_DEF]], [[ref: REV_REG_DEF]] and [[ref: REV_REG_ENTRY]] objects for that type of verifiable credential.
+The [[ref: NYM]] controller of all objects on an Indy ledger MUST reside on the same Indy ledger as the object. Thus, the DID (e.g. the Indy [[ref: NYM]]) of the Issuer of a verifiable credential type must reside on the same ledger as the [[ref: CRED_DEF]], [[ref: REV_REG_DEF]] and [[ref: REV_REG_ENTRY]] objects for that type of verifiable credential.
 
-Note that the constraint above does not apply to a [[ref: SCHEMA]] referenced by a [[ref: CLAIM_DEF]], since a [[ref: CLAIM_DEF]] may use a [[ref: SCHEMA]] written by another [[ref: NYM]]. As such, a [[ref: CLAIM_DEF]] may reference a [[ref: SCHEMA]] on a different Indy ledger.
+Note that the constraint above does not apply to a [[ref: SCHEMA]] referenced by a [[ref: CRED_DEF]], since a [[ref: CRED_DEF]] may use a [[ref: SCHEMA]] written by another [[ref: NYM]]. As such, a [[ref: CRED_DEF]] may reference a [[ref: SCHEMA]] on a different Indy ledger.

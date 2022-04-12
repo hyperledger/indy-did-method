@@ -13,7 +13,7 @@ The components of the DID URL are:
 - `<did>` the `did:indy` DID of the object-owning controller
 - `<object-family>` family of the object
 - `<object-family-version>` version of the object family
-- `<object-type>` one of [[ref: SCHEMA]], [[ref: CLAIM_DEF]], [[ref: REV_REG_DEF]], [[ref: REV_REG_ENTRY]], [[ref: ATTRIB]]
+- `<object-type>` one of [[ref: SCHEMA]], [[ref: CRED_DEF]], [[ref: REV_REG_DEF]], [[ref: REV_REG_ENTRY]], [[ref: ATTRIB]]
 - `<object-type-identifier>` an object type unique identifier defined by Indy by object type.
 
 The data returned from resolving such DID URLs is the ledger object and relevant state proof; the same data returned from the Indy Node read object transactions, such as the [GET_SCHEMA](https://hyperledger-indy.readthedocs.io/projects/node/en/latest/requests.html#get-schema) transaction, and dependent on the type of the object.
@@ -52,26 +52,26 @@ Existing identifier: `F72i3Y3Q4i466efjYJYCHM:2:npdb:4.3.4`
 - `2` is the enumerated object type
 - Name and Schema Version elements defined above.
 
-#### Claim Def
+#### Cred Def
 
 DID URL: [`did:indy:sovrin:5nDyJVP1NrcPAttP3xwMB9/anoncreds/v0/CLAIM_DEF/56495/npdb`](https://indyscan.io/tx/SOVRIN_MAINNET/domain/56496)
 
 - Object Family: `anoncreds`
 - Family Version: `v0`
-- Schema ID, example `56495`: A unique identifier for the schema upon which the ClaimDef is defined. In v0, the value is also the Hyperledger Indy instance sequence number for the Schema object used by this Claim Def.
-  In later versions, we expect that the schema identifier will either be removed from the ClaimDef DID URL, or take a different form.
-- Name, example `npdb`: The client-defined claim def name.
+- Schema ID, example `56495`: A unique identifier for the schema upon which the CredDef is defined. In v0, the value is also the Hyperledger Indy instance sequence number for the Schema object used by this Cred Def.
+  In later versions, we expect that the schema identifier will either be removed from the CredDef DID URL, or take a different form.
+- Name, example `npdb`: The client-defined cred def name.
 
 Response: Same as the Indy Node [GET_CLAIM_DEF Txn](https://hyperledger-indy.readthedocs.io/projects/node/en/latest/requests.html#get-claim-def)
 
 Existing identifier: `5nDyJVP1NrcPAttP3xwMB9:3:CL:56495:npdb`
 
 - `3` is the enumerated object type
-- `CL` is the signature type for the claim def, which is `CL` for all claim defs on all existing Indy ledgers
+- `CL` is the signature type for the cred def, which is `CL` for all cred defs on all existing Indy ledgers
 - Schema ID and Name elements defined above.
 
-We recommend that AnonCred credential issuers use a unique Name item per Claim Def, and not rely on the embedded Schema ID
-remaining in the DID URL for a Claim Def in future versions of the `did:indy` method.
+We recommend that AnonCred credential issuers use a unique Name item per Cred Def, and not rely on the embedded Schema ID
+remaining in the DID URL for a Cred Def in future versions of the `did:indy` method.
 
 #### Revocation Registry Definition
 
@@ -79,9 +79,9 @@ DID URL: [`did:indy:sovrin:5nDyJVP1NrcPAttP3xwMB9/anoncreds/v0/REV_REG_DEF/56495
 
 - Object Family: `anoncreds`
 - Family Version: `v0`
-- Schema ID, example `56495`: A unique identifier for the schema upon which the ClaimDef/RevReg are defined. In v0, the value is also the Hyperledger Indy instance sequence number for the Schema object used by this Claim Def.
+- Schema ID, example `56495`: A unique identifier for the schema upon which the CredDef/RevReg are defined. In v0, the value is also the Hyperledger Indy instance sequence number for the Schema object used by this Cred Def.
   In later versions, we expect that the schema identifier will either be removed from the RevReg DID URL, or take a different form.
-- Claim Def Name, example `npdb`: The client-defined claim def name.
+- Cred Def Name, example `npdb`: The client-defined cred def name.
 - Tag, example `TAG1`: The client-defined rev reg tag (name).
 
 Response: Same as the Indy Node [GET_REVOC_REG_DEF Txn](https://hyperledger-indy.readthedocs.io/projects/node/en/latest/requests.html#get-revoc-reg-def)
@@ -89,7 +89,7 @@ Response: Same as the Indy Node [GET_REVOC_REG_DEF Txn](https://hyperledger-indy
 Existing Identifier: `5nDyJVP1NrcPAttP3xwMB9:4:5nDyJVP1NrcPAttP3xwMB9:3:CL:56495:npdb:CL_ACCUM:TAG1`
 
 - `4` is the enumerated object type
-- `5nDyJVP1NrcPAttP3xwMB9:3:CL:56495:npdb` is the identifier of the associated Claim Def
+- `5nDyJVP1NrcPAttP3xwMB9:3:CL:56495:npdb` is the identifier of the associated Cred Def
 - Tag element defined above.
 
 #### Revocation Registry Entry
@@ -98,9 +98,9 @@ DID URL: [`did:indy:sovrin:5nDyJVP1NrcPAttP3xwMB9/anoncreds/v0/REV_REG_ENTRY/564
 
 - Object Family: `anoncreds`
 - Family Version: `v0`
-- Schema ID, example `56495`: A unique identifier for the schema upon which the ClaimDef/RevReg are defined. In v0, the value is also the Hyperledger Indy instance sequence number for the Schema object used by this Claim Def.
+- Schema ID, example `56495`: A unique identifier for the schema upon which the CredDef/RevReg are defined. In v0, the value is also the Hyperledger Indy instance sequence number for the Schema object used by this Cred Def.
   In later versions, we expect that the schema identifier will either be removed from the RevReg DID URL, or take a different form.
-- Claim Def Name, example `npdb`: The client-defined claim def name.
+- Cred Def Name, example `npdb`: The client-defined cred def name.
 - Tag, example `TAG1`: The client-defined rev reg tag (name).
 
 The DID URL resolution response depends on the query parameters used, as follows:

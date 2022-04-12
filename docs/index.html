@@ -76,65 +76,53 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
 <p>A NYM (short for “Verinym”) is associated with the Legal Identity of an Identity Owner and is a Hyperledger Indy specific term for a data object, which holds DID data of one concrete identity returned during DID resolution. While a NYM can be <a path-0="hyperledger-indy.readthedocs.io"path-1="projects"path-2="node"path-3="en"path-4="latest"path-5="requests.html#get-nym"href="https://hyperledger-indy.readthedocs.io/projects/node/en/latest/requests.html#get-nym" >read</a> from a Hyperledger Indy Node by any client, a NYM can only be <a path-0="hyperledger-indy.readthedocs.io"path-1="projects"path-2="node"path-3="en"path-4="latest"path-5="requests.html#nym"href="https://hyperledger-indy.readthedocs.io/projects/node/en/latest/requests.html#nym" >written</a> to a Hyperledger Indy network as long as the writing entity possess the proper permissions.</p>
 </dd>
 <dd>
-<p>A NYM object itself does not conform to the <a path-0="https:"path-1=""path-2="www.w3.org"path-3="TR"path-4="did-core"path-5=""href="https://https://www.w3.org/TR/did-core/" >Decentralized Identifiers (DIDs) Core specification</a> scheme but rather includes all DID related data of a single identity and therefore its resolution into a DID document does. Therefore writting a NYM to a Hyperledger Indy instance basically results in writting a DID to the ledger. The author of a NYM write transaction is then the owner of the NYM respectively its embedded DID.</p>
+<p>A NYM object itself does not conform to the <a path-0="https:"path-1=""path-2="www.w3.org"path-3="TR"path-4="did-core"path-5=""href="https://https://www.w3.org/TR/did-core/" >Decentralized Identifiers (DIDs) Core specification</a> scheme but rather includes all DID related data of a single identity and therefore its resolution into a DID document does. Therefore writing a NYM to a Hyperledger Indy instance basically results in writing a DID to the ledger. The author of a NYM write transaction is then the owner of the NYM respectively and its embedded DID.</p>
 </dd>
 <dd>
 <p>When reading NYM transaction from the ledger, clients transform / extract the NYM data into a DID document. Often the terms “NYM” and “DID” are used synonymously, although a “NYM” is “just” Hyperledger Indy’s specific way of storing DIDs into the ledger.</p>
 </dd>
-</dl>
-<div id="finalize-nym-glossary-entry" class="notice todo"><a class="notice-link" href="#finalize-nym-glossary-entry">TODO</a><p>finalize</p>
-</div>
-<dl>
 <dt><span id="term:attrib">ATTRIB</span> - <strong>Deprecated</strong></dt>
 <dd>
 <p>A Hyperledger Indy ATTRIB (short for “attribute”) object extends a specific DID (also known as <a class="term-reference" href="#term:nym">NYM</a>) of its owner with further information (attributes) and can be <a path-0="hyperledger-indy.readthedocs.io"path-1="projects"path-2="node"path-3="en"path-4="latest"path-5="requests.html#get-attrib"href="https://hyperledger-indy.readthedocs.io/projects/node/en/latest/requests.html#get-attrib" >read</a> from a Hyperledger Indy Node by any client. An ATTRIB object can only be <a path-0="hyperledger-indy.readthedocs.io"path-1="projects"path-2="node"path-3="en"path-4="latest"path-5="requests.html#attrib"href="https://hyperledger-indy.readthedocs.io/projects/node/en/latest/requests.html#attrib" >written</a> to a Hyperledger Indy network by an owner of the DID on that network.</p>
 </dd>
 <dd>
-<p>The use of ATTRIB is <strong>deprecated</strong> with the introduction of the <code>did:indy</code>
-DID Method. The only common use of ATTRIBs in Hyperledger Indy prior to
-<code>did:indy</code> was to define DIDDoc service endpoints for a DID. Since with
-<code>did:indy</code> such a service endpoint can be added directly to the DID (along with
-any other DIDDoc data) there is no need to continue the use of the older ATTRIB
-<code>endpoint</code> convention. While a Hyperledger Indy client (such as <a class="term-reference" href="#term:indy">Indy</a>) MAY continue to try to resolve an <code>endpoint</code> ATTRIB when there is no
-DIDDoc content in a resolved DID, the ongoing practice of using an ATTRIB for
-that or any other purpose is discouraged.</p>
+<p>The use of ATTRIB is <strong>deprecated</strong> with the introduction of the <code>did:indy</code> DID Method. The only common use of ATTRIBs in Hyperledger Indy prior to <code>did:indy</code> was to define DIDDoc service endpoints for a DID. Since with <code>did:indy</code> such a service endpoint can be added directly to the DID (along with any other DIDDoc data) there is no need to continue the use of the older ATTRIB <code>endpoint</code> convention. While a Hyperledger Indy client (such as <a class="term-reference" href="#term:indy-vdr">Indy VDR</a>) MAY continue to try to resolve an <code>endpoint</code> ATTRIB when there is no DIDDoc content in a resolved DID, the ongoing practice of using an ATTRIB for that or any other purpose is discouraged.</p>
+</dd>
+<dd>
+<p>The <code>did:indy</code> method introduces legacy support for retrieving the service endpoint of a past version of an attribute by <code>versionId</code> or <code>versionTime</code>, using a process similar to resolving <a path-0="hyperledger.github.io"path-1="indy-did-method"path-2="#did-versions"href="%5Chttps://hyperledger.github.io/indy-did-method/#did-versions" >DID Versions</a> by these parameters.</p>
 </dd>
 <dt><span id="term:schema">SCHEMA</span></dt>
 <dd>
-<p>A SCHEMA object is a template that defines a set of attribute(names) which are going to be used by issuers for issuance of <a path-0="www.w3.org"path-1="TR"path-2="vc-data-model"path-3=""href="https://www.w3.org/TR/vc-data-model/" >Verifiable Credentials</a> within a Hyperledger Indy network. SCHEMAs have a name, version and can be <a path-0="hyperledger-indy.readthedocs.io"path-1="projects"path-2="node"path-3="en"path-4="latest"path-5="transactions.html#schema"href="https://hyperledger-indy.readthedocs.io/projects/node/en/latest/transactions.html#schema" >written</a> to the ledger by any entity with proper permissions. Schemas can be <a path-0="hyperledger-indy.readthedocs.io"path-1="projects"path-2="node"path-3="en"path-4="latest"path-5="requests.html#get-schema"href="https://hyperledger-indy.readthedocs.io/projects/node/en/latest/requests.html#get-schema" >read</a>from a Hyperledger Indy Node by any client.</p>
+<p>A SCHEMA object is a template that defines a set of attribute (names) which are going to be used by issuers for issuance of <a path-0="www.w3.org"path-1="TR"path-2="vc-data-model"path-3=""href="https://www.w3.org/TR/vc-data-model/" >Verifiable Credentials</a> within a Hyperledger Indy network. SCHEMAs have a name, version and can be <a path-0="hyperledger-indy.readthedocs.io"path-1="projects"path-2="node"path-3="en"path-4="latest"path-5="transactions.html#schema"href="https://hyperledger-indy.readthedocs.io/projects/node/en/latest/transactions.html#schema" >written</a> to the ledger by any entity with proper permissions. Schemas can be <a path-0="hyperledger-indy.readthedocs.io"path-1="projects"path-2="node"path-3="en"path-4="latest"path-5="requests.html#get-schema"href="https://hyperledger-indy.readthedocs.io/projects/node/en/latest/requests.html#get-schema" >read</a> from a Hyperledger Indy Node by any client.</p>
 </dd>
 <dd>
-<p>SCHEMAs define the list of attribute(names) of issued credentials based on a <a class="term-reference" href="#term:claim_def">CLAIM_DEF</a> (see below).</p>
+<p>SCHEMAs define the list of attribute (names) of issued credentials based on a <a class="term-reference" href="#term:cred_def">CRED_DEF</a> (see below).</p>
 </dd>
-</dl>
-<div id="finalize-schema-glossary-entry" class="notice todo"><a class="notice-link" href="#finalize-schema-glossary-entry">TODO</a><p>finalize</p>
-</div>
-<dl>
-<dt><span id="term:claim_def">CLAIM_DEF</span></dt>
+<dt><span id="term:cred_def">CRED_DEF</span></dt>
 <dd>
-<p>A CLAIM_DEF (short for “claim definition”) object contains data required for credential issuance as well as
-credential validation and can be <a path-0="hyperledger-indy.readthedocs.io"path-1="projects"path-2="node"path-3="en"path-4="latest"path-5="requests.html#get-claim-def"href="https://hyperledger-indy.readthedocs.io/projects/node/en/latest/requests.html#get-claim-def" >read</a> by any Hyperledger Indy client. A CLAIM_DEF object references a <a class="term-reference" href="#term:schema">SCHEMA</a>, references a DID of the issuer and can be <a path-0="hyperledger-indy.readthedocs.io"path-1="projects"path-2="node"path-3="en"path-4="latest"path-5="requests.html#claim-def"href="https://hyperledger-indy.readthedocs.io/projects/node/en/latest/requests.html#claim-def" >written</a> by any issuer who intends to issue credentials based on that specific <a class="term-reference" href="#term:schema">SCHEMA</a> to the ledger and has the proper permissions in doing so. A public key of the issuer is included within the CLAIM_DEF which allows validation of the credentials signed by the issuer’s private key. When credentials are issued by using the issuers CLAIM_DEF, the attribute(names) of the <a class="term-reference" href="#term:schema">SCHEMA</a> have to be used.</p>
+<p>A CRED_DEF (short for “credential definition”) object contains data required for credential issuance as well as
+credential validation and can be <a path-0="hyperledger-indy.readthedocs.io"path-1="projects"path-2="node"path-3="en"path-4="latest"path-5="requests.html#get-claim-def"href="https://hyperledger-indy.readthedocs.io/projects/node/en/latest/requests.html#get-claim-def" >read</a> by any Hyperledger Indy client. A CRED_DEF object references a <a class="term-reference" href="#term:schema">SCHEMA</a>, references a DID of the issuer and can be <a path-0="hyperledger-indy.readthedocs.io"path-1="projects"path-2="node"path-3="en"path-4="latest"path-5="requests.html#claim-def"href="https://hyperledger-indy.readthedocs.io/projects/node/en/latest/requests.html#claim-def" >written</a> by any issuer who intends to issue credentials based on that specific <a class="term-reference" href="#term:schema">SCHEMA</a> to the ledger and has the proper permissions in doing so. A public key of the issuer is included within the CRED_DEF which allows validation of the credentials signed by the issuer’s private key. When credentials are issued by using the issuers CRED_DEF, the attribute (names) of the <a class="term-reference" href="#term:schema">SCHEMA</a> have to be used.</p>
 </dd>
 <dd>
-<p>Revokable Verifiable Credentials require CLAIM_DEFs which also reference a <a class="term-reference" href="#term:rev_reg_def">REV_REG_DEF</a> (see below).</p>
+<p>Revokable Verifiable Credentials require CRED_DEFs which also reference a <a class="term-reference" href="#term:rev_reg_def">REV_REG_DEF</a> (see below).</p>
 </dd>
-</dl>
-<div id="finalize-claim_def-glossary-entry" class="notice todo"><a class="notice-link" href="#finalize-claim_def-glossary-entry">TODO</a><p>finalize</p>
-</div>
-<dl>
+<dt><span id="term:claim_def">CLAIM_DEF</span> - <strong>Deprecated</strong></dt>
+<dd>
+<p>The deprecated term CLAIM_DEF is sometimes used to describe a CRED_DEF, particularly in existing Hyperledger Indy code.</p>
+</dd>
 <dt><span id="term:rev_reg_def">REV_REG_DEF</span></dt>
 <dd>
 <p>A REV_REG_DEF object (short for “revocation registry definition”) contains information required for verifiers in order to enable them to verify whether a (revokable) verifiable credential has been revoked by the issuer since issuance.</p>
 </dd>
 <dd>
-<p>REV_REG_DEFs are only needed for revokable verifiable credentials and are most commonly <a path-0="hyperledger-indy.readthedocs.io"path-1="projects"path-2="node"path-3="en"path-4="latest"path-5="requests.html#claim-def"href="https://hyperledger-indy.readthedocs.io/projects/node/en/latest/requests.html#claim-def" >written</a> to the ledger by the owner of a <a class="term-reference" href="#term:claim_def">CLAIM_DEF</a> immediatly after the <a class="term-reference" href="#term:claim_def">CLAIM_DEF</a> has been written. They can be <a path-0="hyperledger-indy.readthedocs.io"path-1="projects"path-2="node"path-3="en"path-4="latest"path-5="requests.html#get-attrib"href="https://hyperledger-indy.readthedocs.io/projects/node/en/latest/requests.html#get-attrib" >read</a> from a Hyperledger Indy Node by any client and are updated in case of the revocation of a credential, which is based on the used <a class="term-reference" href="#term:claim_def">CLAIM_DEF</a>.</p>
+<p>REV_REG_DEFs are only needed for revokable verifiable credentials and are most commonly <a path-0="hyperledger-indy.readthedocs.io"path-1="projects"path-2="node"path-3="en"path-4="latest"path-5="requests.html#claim-def"href="https://hyperledger-indy.readthedocs.io/projects/node/en/latest/requests.html#claim-def" >written</a> to the ledger by the owner of a <a class="term-reference" href="#term:cred_def">CRED_DEF</a> immediatly after the <a class="term-reference" href="#term:cred_def">CRED_DEF</a> has been written. They can be <a path-0="hyperledger-indy.readthedocs.io"path-1="projects"path-2="node"path-3="en"path-4="latest"path-5="requests.html#get-attrib"href="https://hyperledger-indy.readthedocs.io/projects/node/en/latest/requests.html#get-attrib" >read</a> from a Hyperledger Indy Node by any client and are updated in case of the revocation of a credential, which is based on the used <a class="term-reference" href="#term:cred_def">CRED_DEF</a>.</p>
 </dd>
 <dd>
 <p>Further details about Hyperledger Indy’s revocation process can be found <a path-0="hyperledger-indy.readthedocs.io"path-1="projects"path-2="hipe"path-3="en"path-4="latest"path-5="text"path-6="0011-cred-revocation"path-7="README.html"href="https://hyperledger-indy.readthedocs.io/projects/hipe/en/latest/text/0011-cred-revocation/README.html" >here</a>.</p>
 </dd>
 <dt><span id="term:rev_reg_entry">REV_REG_ENTRY</span></dt>
 <dd>
-<p>A REV_REG_ENTRY object (short for “revocation registry entry”) marks the current status of one or more revokable verifiable credentials (“revoked” or “not revoked”) in the ledger in a privacy preserving manner. A REV_REG_ENTRY is <a path-0="hyperledger-indy.readthedocs.io"path-1="projects"path-2="node"path-3="en"path-4="latest"path-5="requests.html#revoc-reg-entry"href="https://hyperledger-indy.readthedocs.io/projects/node/en/latest/requests.html#revoc-reg-entry" >written</a> by the owner of a REV_REG_DEF respectively the issuer of the credential(s) based on a <a class="term-reference" href="#term:claim_def">CLAIM_DEF</a> and its REV_REG_DEF.</p>
+<p>A REV_REG_ENTRY object (short for “revocation registry entry”) marks the current status of one or more revokable verifiable credentials (“revoked” or “not revoked”) in the ledger in a privacy preserving manner. A REV_REG_ENTRY is <a path-0="hyperledger-indy.readthedocs.io"path-1="projects"path-2="node"path-3="en"path-4="latest"path-5="requests.html#revoc-reg-entry"href="https://hyperledger-indy.readthedocs.io/projects/node/en/latest/requests.html#revoc-reg-entry" >written</a> by the owner of a REV_REG_DEF respectively the issuer of the credential(s) based on a <a class="term-reference" href="#term:cred_def">CRED_DEF</a> and its REV_REG_DEF.</p>
 </dd>
 <dd>
 <p>Any REV_REG_ENTRY condensed with further required information can be <a path-0="hyperledger-indy.readthedocs.io"path-1="projects"path-2="node"path-3="en"path-4="latest"path-5="requests.html#get-revoc-reg-delta"href="https://hyperledger-indy.readthedocs.io/projects/node/en/latest/requests.html#get-revoc-reg-delta" >read</a> by any Hyperledger Indy client.</p>
@@ -152,8 +140,8 @@ The repository is called indy-vdr and can be found <a path-0="github.com"path-1=
 <p>Early instances of Indy Networks used the <code>did:sov</code> DID Method. The following summarizes the differences between that <code>did:sov</code> and <code>did:indy</code>.</p>
 <ul>
 <li>A <code>did:indy</code> DID includes a namespace component that enables resolving a DID to a specific instance of an Indy network (e.g. Sovrin, IDUnion, etc.).</li>
-<li><code>did:indy</code> DID validation is determined by NYM transaction <code>version</code>, as described in the <a href="#nym-transaction-version" >DID Creation</a> section. These restrictions MUST be enforced by the ledger.</li>
 <li>Identifiers for Indy ledger objects other than <a class="term-reference" href="#term:nym">NYM</a>s are adjusted to contain a namespace component.</li>
+<li><code>did:indy</code> DID validation is determined by NYM transaction <code>version</code>, as described in the <a href="#nym-transaction-version" >DID Creation</a> section. These restrictions MUST be enforced by the ledger.</li>
 <li>The specification includes rules for transforming a <a class="term-reference" href="#term:nym">NYM</a> into a DIDDoc that meets the DID Core Specification.
 <ul>
 <li>An optional <a class="term-reference" href="#term:nym">NYM</a> data item allows entities to extend the DIDDoc returned from a <a class="term-reference" href="#term:nym">NYM</a> in arbitrary ways.</li>
@@ -182,8 +170,8 @@ The repository is called indy-vdr and can be found <a path-0="github.com"path-1=
 <h3 id="resolving-a-diddoc-in-a-single-transaction"><a class="toc-anchor" href="#resolving-a-diddoc-in-a-single-transaction" >§</a> Resolving a DIDDoc in a single transaction</h3>
 <p>Previous approaches to resolving Indy ledger objects into DIDDocs required the client read one or more ledger objects (notably, <a class="term-reference" href="#term:nym">NYM</a>s and <a class="term-reference" href="#term:attrib">ATTRIB</a>s) before assembly. This is at best “challenging” for the client, and at worst, extremely slow without specialized ledger support, particularly when a non-current version of the DID is being resolved. A preferred approach is to enable the resolution of a DID via a single read transaction that returns a single object off the ledger, including a state proof for that object.</p>
 <h3 id="cross-ledger-object-references"><a class="toc-anchor" href="#cross-ledger-object-references" >§</a> Cross-Ledger Object References</h3>
-<p>The <a class="term-reference" href="#term:nym">NYM</a> controller of all objects on an Indy ledger MUST reside on the same Indy ledger as the object. Thus, the DID (e.g. the Indy <a class="term-reference" href="#term:nym">NYM</a>) of the Issuer of a verifiable credential type must reside on the same ledger as the <a class="term-reference" href="#term:claim_def">CLAIM_DEF</a>, <a class="term-reference" href="#term:rev_reg_def">REV_REG_DEF</a> and <a class="term-reference" href="#term:rev_reg_entry">REV_REG_ENTRY</a> objects for that type of verifiable credential.</p>
-<p>Note that the constraint above does not apply to a <a class="term-reference" href="#term:schema">SCHEMA</a> referenced by a <a class="term-reference" href="#term:claim_def">CLAIM_DEF</a>, since a <a class="term-reference" href="#term:claim_def">CLAIM_DEF</a> may use a <a class="term-reference" href="#term:schema">SCHEMA</a> written by another <a class="term-reference" href="#term:nym">NYM</a>. As such, a <a class="term-reference" href="#term:claim_def">CLAIM_DEF</a> may reference a <a class="term-reference" href="#term:schema">SCHEMA</a> on a different Indy ledger.</p>
+<p>The <a class="term-reference" href="#term:nym">NYM</a> controller of all objects on an Indy ledger MUST reside on the same Indy ledger as the object. Thus, the DID (e.g. the Indy <a class="term-reference" href="#term:nym">NYM</a>) of the Issuer of a verifiable credential type must reside on the same ledger as the <a class="term-reference" href="#term:cred_def">CRED_DEF</a>, <a class="term-reference" href="#term:rev_reg_def">REV_REG_DEF</a> and <a class="term-reference" href="#term:rev_reg_entry">REV_REG_ENTRY</a> objects for that type of verifiable credential.</p>
+<p>Note that the constraint above does not apply to a <a class="term-reference" href="#term:schema">SCHEMA</a> referenced by a <a class="term-reference" href="#term:cred_def">CRED_DEF</a>, since a <a class="term-reference" href="#term:cred_def">CRED_DEF</a> may use a <a class="term-reference" href="#term:schema">SCHEMA</a> written by another <a class="term-reference" href="#term:nym">NYM</a>. As such, a <a class="term-reference" href="#term:cred_def">CRED_DEF</a> may reference a <a class="term-reference" href="#term:schema">SCHEMA</a> on a different Indy ledger.</p>
 <h2 id="indy-did-method-identifiers"><a class="toc-anchor" href="#indy-did-method-identifiers" >§</a> Indy DID Method Identifiers</h2>
 <p>The did:indy Method DID identifier has four components that are concatenated to make a DID specification conformant identifier. The components are:</p>
 <ul>
@@ -224,7 +212,7 @@ The repository is called indy-vdr and can be found <a path-0="github.com"path-1=
 <li><code>&lt;did&gt;</code> the <code>did:indy</code> DID of the object-owning controller</li>
 <li><code>&lt;object-family&gt;</code> family of the object</li>
 <li><code>&lt;object-family-version&gt;</code> version of the object family</li>
-<li><code>&lt;object-type&gt;</code> one of <a class="term-reference" href="#term:schema">SCHEMA</a>, <a class="term-reference" href="#term:claim_def">CLAIM_DEF</a>, <a class="term-reference" href="#term:rev_reg_def">REV_REG_DEF</a>, <a class="term-reference" href="#term:rev_reg_entry">REV_REG_ENTRY</a>, <a class="term-reference" href="#term:attrib">ATTRIB</a></li>
+<li><code>&lt;object-type&gt;</code> one of <a class="term-reference" href="#term:schema">SCHEMA</a>, <a class="term-reference" href="#term:cred_def">CRED_DEF</a>, <a class="term-reference" href="#term:rev_reg_def">REV_REG_DEF</a>, <a class="term-reference" href="#term:rev_reg_entry">REV_REG_ENTRY</a>, <a class="term-reference" href="#term:attrib">ATTRIB</a></li>
 <li><code>&lt;object-type-identifier&gt;</code> an object type unique identifier defined by Indy by object type.</li>
 </ul>
 <p>The data returned from resolving such DID URLs is the ledger object and relevant state proof; the same data returned from the Indy Node read object transactions, such as the <a path-0="hyperledger-indy.readthedocs.io"path-1="projects"path-2="node"path-3="en"path-4="latest"path-5="requests.html#get-schema"href="https://hyperledger-indy.readthedocs.io/projects/node/en/latest/requests.html#get-schema" >GET_SCHEMA</a> transaction, and dependent on the type of the object.</p>
@@ -257,39 +245,39 @@ and the required dependency on Hyperledger Indy is removed. In this initial vers
 <li><code>2</code> is the enumerated object type</li>
 <li>Name and Schema Version elements defined above.</li>
 </ul>
-<h4 id="claim-def"><a class="toc-anchor" href="#claim-def" >§</a> Claim Def</h4>
+<h4 id="cred-def"><a class="toc-anchor" href="#cred-def" >§</a> Cred Def</h4>
 <p>DID URL: <a path-0="indyscan.io"path-1="tx"path-2="SOVRIN_MAINNET"path-3="domain"path-4="56496"href="https://indyscan.io/tx/SOVRIN_MAINNET/domain/56496" ><code>did:indy:sovrin:5nDyJVP1NrcPAttP3xwMB9/anoncreds/v0/CLAIM_DEF/56495/npdb</code></a></p>
 <ul>
 <li>Object Family: <code>anoncreds</code></li>
 <li>Family Version: <code>v0</code></li>
-<li>Schema ID, example <code>56495</code>: A unique identifier for the schema upon which the ClaimDef is defined. In v0, the value is also the Hyperledger Indy instance sequence number for the Schema object used by this Claim Def.
-In later versions, we expect that the schema identifier will either be removed from the ClaimDef DID URL, or take a different form.</li>
-<li>Name, example <code>npdb</code>: The client-defined claim def name.</li>
+<li>Schema ID, example <code>56495</code>: A unique identifier for the schema upon which the CredDef is defined. In v0, the value is also the Hyperledger Indy instance sequence number for the Schema object used by this Cred Def.
+In later versions, we expect that the schema identifier will either be removed from the CredDef DID URL, or take a different form.</li>
+<li>Name, example <code>npdb</code>: The client-defined cred def name.</li>
 </ul>
 <p>Response: Same as the Indy Node <a path-0="hyperledger-indy.readthedocs.io"path-1="projects"path-2="node"path-3="en"path-4="latest"path-5="requests.html#get-claim-def"href="https://hyperledger-indy.readthedocs.io/projects/node/en/latest/requests.html#get-claim-def" >GET_CLAIM_DEF Txn</a></p>
 <p>Existing identifier: <code>5nDyJVP1NrcPAttP3xwMB9:3:CL:56495:npdb</code></p>
 <ul>
 <li><code>3</code> is the enumerated object type</li>
-<li><code>CL</code> is the signature type for the claim def, which is <code>CL</code> for all claim defs on all existing Indy ledgers</li>
+<li><code>CL</code> is the signature type for the cred def, which is <code>CL</code> for all cred defs on all existing Indy ledgers</li>
 <li>Schema ID and Name elements defined above.</li>
 </ul>
-<p>We recommend that AnonCred credential issuers use a unique Name item per Claim Def, and not rely on the embedded Schema ID
-remaining in the DID URL for a Claim Def in future versions of the <code>did:indy</code> method.</p>
+<p>We recommend that AnonCred credential issuers use a unique Name item per Cred Def, and not rely on the embedded Schema ID
+remaining in the DID URL for a Cred Def in future versions of the <code>did:indy</code> method.</p>
 <h4 id="revocation-registry-definition"><a class="toc-anchor" href="#revocation-registry-definition" >§</a> Revocation Registry Definition</h4>
 <p>DID URL: <a path-0="indyscan.io"path-1="tx"path-2="SOVRIN_MAINNET"path-3="domain"path-4="56497"href="https://indyscan.io/tx/SOVRIN_MAINNET/domain/56497" ><code>did:indy:sovrin:5nDyJVP1NrcPAttP3xwMB9/anoncreds/v0/REV_REG_DEF/56495/npdb/TAG1</code></a></p>
 <ul>
 <li>Object Family: <code>anoncreds</code></li>
 <li>Family Version: <code>v0</code></li>
-<li>Schema ID, example <code>56495</code>: A unique identifier for the schema upon which the ClaimDef/RevReg are defined. In v0, the value is also the Hyperledger Indy instance sequence number for the Schema object used by this Claim Def.
+<li>Schema ID, example <code>56495</code>: A unique identifier for the schema upon which the CredDef/RevReg are defined. In v0, the value is also the Hyperledger Indy instance sequence number for the Schema object used by this Cred Def.
 In later versions, we expect that the schema identifier will either be removed from the RevReg DID URL, or take a different form.</li>
-<li>Claim Def Name, example <code>npdb</code>: The client-defined claim def name.</li>
+<li>Cred Def Name, example <code>npdb</code>: The client-defined cred def name.</li>
 <li>Tag, example <code>TAG1</code>: The client-defined rev reg tag (name).</li>
 </ul>
 <p>Response: Same as the Indy Node <a path-0="hyperledger-indy.readthedocs.io"path-1="projects"path-2="node"path-3="en"path-4="latest"path-5="requests.html#get-revoc-reg-def"href="https://hyperledger-indy.readthedocs.io/projects/node/en/latest/requests.html#get-revoc-reg-def" >GET_REVOC_REG_DEF Txn</a></p>
 <p>Existing Identifier: <code>5nDyJVP1NrcPAttP3xwMB9:4:5nDyJVP1NrcPAttP3xwMB9:3:CL:56495:npdb:CL_ACCUM:TAG1</code></p>
 <ul>
 <li><code>4</code> is the enumerated object type</li>
-<li><code>5nDyJVP1NrcPAttP3xwMB9:3:CL:56495:npdb</code> is the identifier of the associated Claim Def</li>
+<li><code>5nDyJVP1NrcPAttP3xwMB9:3:CL:56495:npdb</code> is the identifier of the associated Cred Def</li>
 <li>Tag element defined above.</li>
 </ul>
 <h4 id="revocation-registry-entry"><a class="toc-anchor" href="#revocation-registry-entry" >§</a> Revocation Registry Entry</h4>
@@ -297,9 +285,9 @@ In later versions, we expect that the schema identifier will either be removed f
 <ul>
 <li>Object Family: <code>anoncreds</code></li>
 <li>Family Version: <code>v0</code></li>
-<li>Schema ID, example <code>56495</code>: A unique identifier for the schema upon which the ClaimDef/RevReg are defined. In v0, the value is also the Hyperledger Indy instance sequence number for the Schema object used by this Claim Def.
+<li>Schema ID, example <code>56495</code>: A unique identifier for the schema upon which the CredDef/RevReg are defined. In v0, the value is also the Hyperledger Indy instance sequence number for the Schema object used by this Cred Def.
 In later versions, we expect that the schema identifier will either be removed from the RevReg DID URL, or take a different form.</li>
-<li>Claim Def Name, example <code>npdb</code>: The client-defined claim def name.</li>
+<li>Cred Def Name, example <code>npdb</code>: The client-defined cred def name.</li>
 <li>Tag, example <code>TAG1</code>: The client-defined rev reg tag (name).</li>
 </ul>
 <p>The DID URL resolution response depends on the query parameters used, as follows:</p>
@@ -392,7 +380,7 @@ client updated for <code>did:indy</code> should put the required data directly i
 <h4 id="nym-transaction-version"><a class="toc-anchor" href="#nym-transaction-version" >§</a> NYM Transaction Version</h4>
 <p>The NYM transaction <code>version</code> specifies the required level of validation of the relationship between the namespace identifier component of the DID and the intial public key (verkey). This field is optional, but if the NYM transaction <code>version</code> is provided, it must be set upon creation and cannot be updated. The accepted values are as follows:</p>
 <ul>
-<li>0 or NYM transaction <code>version</code> is not set: No validation of namespace identifier and initial verkey binding is performed</li>
+<li>0 or NYM transaction <code>version</code> is not set: No validation of namespace identifier and initial verkey binding is performed.</li>
 <li>1: Validation is performed according to the <code>did:sov</code> method, in which the DID must be the first 16 bytes of the Verification Method public key.</li>
 <li>2: Validation is performed according to the <code>did:indy</code>, in which the namespace identifier component of the DID (last element) is derived from the initial public key of the DID, using the base58 encoding of the first 16 bytes of the SHA256 of the Verification Method public key (<code>did = Base58(Truncate_msb(16(SHA256(publicKey))))</code>). This DID is considered self-certifying.</li>
 </ul>
@@ -401,8 +389,15 @@ client updated for <code>did:indy</code> should put the required data directly i
 <p>Prior to <code>did:indy</code>, the unenforced convention in the Indy SDK was to use the following to demonstrate the relationship between the DID and its initial verkey: <code>For an Ed25519 key: Convert into Base58char the first 16 bytes of the 256 bit public key (verkey).</code> If the <code>did:indy</code> approach to verifying the relationship between the DID and its initial verkey fail, a client resolving a DID MAY attempt to verify the relationship using the old Indy SDK convention.</p>
 <p>When using the old Indy SDK convention of using the first 16 bytes of the verkey, related convention allowed for the placement of a shortened verkey (prefixed with <code>~</code>) in the NYM <code>verkey</code> field, such that the full verkey was dynamically generated by combining the DID and shortened verkey. That convention is <strong>NOT</strong> used in “did:indy”, but client resolvers using DIDs created prior to <code>did:indy</code> MUST detect and convert shortened verkeys to full verkeys as necessary.</p>
 <h4 id="diddoc-assembly-and-verification"><a class="toc-anchor" href="#diddoc-assembly-and-verification" >§</a> DIDDoc Assembly and Verification</h4>
-<p>The DIDDoc returned when a <code>did:indy</code> DID is resolved is not directly stored in an Indy ledger document. Instead, the DIDDoc must be assembled from data elements in the Indy <code>NYM</code> object based on a series of steps. When a <a class="term-reference" href="#term:nym">NYM</a> is created or updated the ledger MUST assemble the DIDDoc (following the steps) and validate the DIDDoc. As well, an Indy DID resolver will receive from the ledger the <a class="term-reference" href="#term:nym">NYM</a> from the ledger and the non-validation steps must be followed to assemble the DIDDoc for the resolved DID.</p>
-<p>If the <code>diddocContent</code> item contains a <code>@context</code> item, the resulting DIDDoc is considered JSON-LD. It is the responsibility of the content creator to ensure that it is valid JSON-LD.</p>
+<p>The DIDDoc returned when a <code>did:indy</code> DID is resolved is not directly stored in an Indy ledger document. Instead, the DIDDoc must be assembled from data elements in the Indy <code>NYM</code> object based on a series of steps. When a <a class="term-reference" href="#term:nym">NYM</a> is created or updated the ledger MUST assemble the DIDDoc (following the steps) and validate the DIDDoc. As well, an Indy DID resolver will receive the <a class="term-reference" href="#term:nym">NYM</a> from the ledger and the non-validation steps must be followed to assemble the DIDDoc for the resolved DID.</p>
+<p>The <code>diddocContent</code> item is stored directly in the ledger state and has a maximum size of 10 KiB (10 x 1024 bytes). If the <code>diddocContent</code> item contains a <code>@context</code> item, the resulting DIDDoc is considered JSON-LD. It is the responsibility of the content creator to ensure that it is valid JSON-LD.</p>
+<h5 id="diddoc-validation"><a class="toc-anchor" href="#diddoc-validation" >§</a> DIDDoc Validation</h5>
+<p>The following validation must be performed on a DIDDoc:</p>
+<ul>
+<li>Content must not include <code>id</code> at root of the object</li>
+<li>Content must not include any nested objects with an <code>id</code> ending in <nym>#verkey</li>
+</ul>
+<p>This minimal validation allows for the evolution of the DIDDoc without the effort of updating deployments with each minor update. Instead, the writers and resolvers must ensure that the DIDDoc is valid beyond these basic requirements.</p>
 <h4 id="diddoc-assembly-steps"><a class="toc-anchor" href="#diddoc-assembly-steps" >§</a> DIDDoc Assembly Steps</h4>
 <p>The following are the steps for assembling a DIDDoc from its inputs.</p>
 <ol>
@@ -422,11 +417,7 @@ client updated for <code>did:indy</code> should put the required data directly i
 </ol>
 </li>
 <li>The resulting DIDDoc text must be valid JSON. If not JSON, exit and return an error.</li>
-<li>The resulting JSON must be a valid DIDDoc. Perform a <code>&lt;to be determined&gt;</code> validation process. If not a DIDDoc, exit and return an error.</li>
-</ol>
-<div id="is-this-the-correct-process-name" class="notice warning"><a class="notice-link" href="#is-this-the-correct-process-name">WARNING</a><p>is <code>&lt;to be determined&gt;</code> the correct process name?</p>
-</div>
-<ol start="6">
+<li>The resulting JSON must be a valid DIDDoc. Perform the <a href="#diddoc-validation" >DIDDoc Validation</a> process. If not a DIDDoc, exit and return an error.</li>
 <li>Return the DIDDoc and a success status.</li>
 </ol>
 <p>The remainder of this section goes through examples of base DIDDoc template (step 2, above) that is created prior to processing the optional <code>diddocContent</code> item, and an example of processing a <code>diddocContent</code> item.</p>
@@ -536,7 +527,7 @@ client updated for <code>did:indy</code> should put the required data directly i
 <p>The DIDDoc produced by the <a class="term-reference" href="#term:nym">NYM</a> and “endpoint” <a class="term-reference" href="#term:attrib">ATTRIB</a> would be created using the DIDDoc Assembly Rules and using the <code>diddocContent</code> from the <a class="term-reference" href="#term:attrib">ATTRIB</a> instead of the <a class="term-reference" href="#term:nym">NYM</a> item.</p>
 <h3 id="update"><a class="toc-anchor" href="#update" >§</a> Update</h3>
 <p>Updating a DID using the Indy DID Method occurs when a <code>NYM</code> transaction is performed by the <a class="term-reference" href="#term:nym">NYM</a>'s controller (the “owner” of the <a class="term-reference" href="#term:nym">NYM</a>) using the same identifier (<code>dest</code>). The Indy ledger MUST validate the <a class="term-reference" href="#term:nym">NYM</a> transaction prior to writing the <a class="term-reference" href="#term:nym">NYM</a> to the ledger.</p>
-<p>When a <a class="term-reference" href="#term:nym">NYM</a> is updated, the identifier (<code>dest</code>) for the <a class="term-reference" href="#term:nym">NYM</a> does not change, but other values, including the <code>verkey</code> and <code>diddocContent</code>, may be changed. This means that (as expected) the DID itself does not change, but the DIDDoc returned by the DID may change.</p>
+<p>When a <a class="term-reference" href="#term:nym">NYM</a> is updated, the identifier (<code>dest</code>) for the <a class="term-reference" href="#term:nym">NYM</a> does not change, but other values, including the <code>verkey</code> and <code>diddocContent</code>, may be changed. This means that (as expected) the DID itself does not change, but the DIDDoc returned by the DID may change. The NYM transaction <code>version</code> must not be updated.</p>
 <p>The following validation steps are performed prior to the update being written to the ledger:</p>
 <ul>
 <li>
@@ -547,6 +538,9 @@ client updated for <code>did:indy</code> should put the required data directly i
 </li>
 <li>
 <p>The Indy ledger MUST check that the data in the <a class="term-reference" href="#term:nym">NYM</a> produces valid JSON and MUST do a limited DIDDoc validation check prior to writing the <a class="term-reference" href="#term:nym">NYM</a> object to the ledger. Details of the assembly and verification are <a href="#diddoc-assembly-and-verification" >here</a>. If the DIDDoc validation fails, the transaction MUST be rejected and an error returned to the client.</p>
+</li>
+<li>
+<p>The Indy ledger checks that the NYM transaction <code>version</code> is not updated. If the <code>version</code> is updated, the transaction MUST be rejected and an error returned to the client.</p>
 </li>
 </ul>
 <p>Although the DIDDoc is returned from the DIDDoc assembly and verification process, the DIDDoc is not used further by the ledger.</p>
@@ -741,7 +735,7 @@ However, DID’s on the ledger, used by organizations, enable correlation by the
 <li><a href="#did-urls-for-indy-object-identifiers" >DID URLs for Indy Object Identifiers</a>
 <ul>
 <li><a href="#schema" >Schema</a></li>
-<li><a href="#claim-def" >Claim Def</a></li>
+<li><a href="#cred-def" >Cred Def</a></li>
 <li><a href="#revocation-registry-definition" >Revocation Registry Definition</a></li>
 <li><a href="#revocation-registry-entry" >Revocation Registry Entry</a></li>
 <li><a href="#attrib" >ATTRIB</a></li>
