@@ -199,6 +199,46 @@ If clients want to continue to retrieve and use the `endpoint` [[ref: ATTRIB]] t
 
 The DIDDoc produced by the [[ref: NYM]] and "endpoint" [[ref: ATTRIB]] would be created using the DIDDoc Assembly Rules and using the `diddocContent` from the [[ref: ATTRIB]] instead of the [[ref: NYM]] item.
 
+#### The "diddocContent" ATTRIB
+
+As described in previous sections, this DID Method introduces the optional `diddocContent` item in [[ref: NYM]] transactions, which is used in the [DIDDoc assembly process](#diddoc-assembly-and-verification).
+
+There may however be networks which use a version of Hyperledger Indy that doesn't support this field yet. In this case, when [creating](#creation) or [updating](#update) a `did:indy` DID, implementations MAY write the `diddocContent` to an [[ref: ATTRIB]] transaction with a `raw` value containing the JSON for a name-value pair with name `diddocContent`, instead of using the field in a [[ref: NYM]] transaction.
+
+Once such a network is upgraded to a version that supports the `diddocContent` item in the [[ref: NYM]], we strongly encourage anyone using the "ATTRIB `diddocContent`" convention to update their [[ref: NYM]] on the ledger to use the `diddocContent` item as soon as possible, analogous to the ["ATTRIB `endpoint`" convention](#the-endpoint-attrib).
+
+If a client retrieves a [[ref: NYM]] that has a `diddocContent` data element, the client should assume that the DID Controller has made the [[ref: ATTRIB]] (if any) obsolete and the client SHOULD NOT retrieve the [[ref: ATTRIB]] associated with the DID.
+
+Otherwise, the client SHOULD attempt to retrieve the `diddocContent` [[ref: ATTRIB]] transaction associated with a [[ref: NYM]] and, if present, treat it as if its `raw` value was the value of the `diddocContent` item in the [[ref: NYM]].
+
+The following is an example ATTRIB transaction with a `raw` value containing `diddocContent`:
+
+::: example Example ATTRIB transaction with a `raw` value containing `diddocContent`
+```json
+{
+	"txn": {
+		"data": {
+			"dest": "P8xKoMHo5tvaCBu9sg7qmE",
+			"raw": "{\"diddocContent\":{\"@context\":[\"https://www.w3.org/ns/did/v1\",\"https://identity.foundation/didcomm-messaging/service-endpoint/v1\"],\"service\":[{\"id\":\"did:indy:sovrin:123456#did-communication\",\"type\":\"did-communication\",\"priority\":0,\"serviceEndpoint\":\"https://example.com\",\"recipientKeys\":[\"#verkey\"],\"routingKeys\":[]}]}}"
+		},
+		"metadata": {
+			"reqId": 1681588180411147000,
+			"from": "P8xKoMHo5tvaCBu9sg7qmE",
+			"digest": "38f422258c5f674f60e08274cf400a351dabfb3f5c80b59966f2889947bf3387",
+			"payloadDigest": "0aa1a7d1de92da1056c7702dee10fba0cc7d13378f6cd11ec392da2d95c3e2fb"
+		},
+		"protocolVersion": 2,
+		"type": "100"
+	},
+	"txnMetadata": {
+		"seqNo": 807,
+		"txnId": "P8xKoMHo5tvaCBu9sg7qmE:1:9bc57c8357576385437819bd163d4cd6dda6acb9a424033d50a646bc54438ef3",
+		"txnTime": 1681588183
+	}
+}
+```
+:::
+
 ### Update
 
 Updating a DID using the Indy DID Method occurs when a `NYM` transaction is performed by the [[ref: NYM]]'s controller (the "owner" of the [[ref: NYM]]) using the same identifier (`dest`). The Indy ledger MUST validate the [[ref: NYM]] transaction prior to writing the [[ref: NYM]] to the ledger.

@@ -530,6 +530,36 @@ client updated for <code>did:indy</code> should put the required data directly i
 <span class="token punctuation">}</span>
 </code></pre>
 <p>The DIDDoc produced by the <a class="term-reference" href="#term:nym">NYM</a> and “endpoint” <a class="term-reference" href="#term:attrib">ATTRIB</a> would be created using the DIDDoc Assembly Rules and using the <code>diddocContent</code> from the <a class="term-reference" href="#term:attrib">ATTRIB</a> instead of the <a class="term-reference" href="#term:nym">NYM</a> item.</p>
+<h4 id="the-diddoccontent-attrib"><a class="toc-anchor" href="#the-diddoccontent-attrib" >§</a> The “diddocContent” ATTRIB</h4>
+<p>As described in previous sections, this DID Method introduces the optional <code>diddocContent</code> item in <a class="term-reference" href="#term:nym">NYM</a> transactions, which is used in the <a href="#diddoc-assembly-and-verification" >DIDDoc assembly process</a>.</p>
+<p>There may however be networks which use a version of Hyperledger Indy that doesn’t support this field yet. In this case, when <a href="#creation" >creating</a> or <a href="#update" >updating</a> a <code>did:indy</code> DID, implementations MAY write the <code>diddocContent</code> to an <a class="term-reference" href="#term:attrib">ATTRIB</a> transaction with a <code>raw</code> value containing the JSON for a name-value pair with name <code>diddocContent</code>, instead of using the field in a <a class="term-reference" href="#term:nym">NYM</a> transaction.</p>
+<p>Once such a network is upgraded to a version that supports the <code>diddocContent</code> item in the <a class="term-reference" href="#term:nym">NYM</a>, we strongly encourage anyone using the &quot;ATTRIB <code>diddocContent</code>&quot; convention to update their <a class="term-reference" href="#term:nym">NYM</a> on the ledger to use the <code>diddocContent</code> item as soon as possible, analogous to the <a href="#the-endpoint-attrib" >&quot;ATTRIB <code>endpoint</code>&quot; convention</a>.</p>
+<p>If a client retrieves a <a class="term-reference" href="#term:nym">NYM</a> that has a <code>diddocContent</code> data element, the client should assume that the DID Controller has made the <a class="term-reference" href="#term:attrib">ATTRIB</a> (if any) obsolete and the client SHOULD NOT retrieve the <a class="term-reference" href="#term:attrib">ATTRIB</a> associated with the DID.</p>
+<p>Otherwise, the client SHOULD attempt to retrieve the <code>diddocContent</code> <a class="term-reference" href="#term:attrib">ATTRIB</a> transaction associated with a <a class="term-reference" href="#term:nym">NYM</a> and, if present, treat it as if its <code>raw</code> value was the value of the <code>diddocContent</code> item in the <a class="term-reference" href="#term:nym">NYM</a>.</p>
+<p>The following is an example ATTRIB transaction with a <code>raw</code> value containing <code>diddocContent</code>:</p>
+<div id="example-attrib-transaction-with-a-`raw`-value-containing-`diddoccontent`" class="notice example"><a class="notice-link" href="#example-attrib-transaction-with-a-`raw`-value-containing-`diddoccontent`">EXAMPLE</a><pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
+	<span class="token property">"txn"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+		<span class="token property">"data"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+			<span class="token property">"dest"</span><span class="token operator">:</span> <span class="token string">"P8xKoMHo5tvaCBu9sg7qmE"</span><span class="token punctuation">,</span>
+			<span class="token property">"raw"</span><span class="token operator">:</span> <span class="token string">"{\"diddocContent\":{\"@context\":[\"https://www.w3.org/ns/did/v1\",\"https://identity.foundation/didcomm-messaging/service-endpoint/v1\"],\"service\":[{\"id\":\"did:indy:sovrin:123456#did-communication\",\"type\":\"did-communication\",\"priority\":0,\"serviceEndpoint\":\"https://example.com\",\"recipientKeys\":[\"#verkey\"],\"routingKeys\":[]}]}}"</span>
+		<span class="token punctuation">}</span><span class="token punctuation">,</span>
+		<span class="token property">"metadata"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+			<span class="token property">"reqId"</span><span class="token operator">:</span> <span class="token number">1681588180411147000</span><span class="token punctuation">,</span>
+			<span class="token property">"from"</span><span class="token operator">:</span> <span class="token string">"P8xKoMHo5tvaCBu9sg7qmE"</span><span class="token punctuation">,</span>
+			<span class="token property">"digest"</span><span class="token operator">:</span> <span class="token string">"38f422258c5f674f60e08274cf400a351dabfb3f5c80b59966f2889947bf3387"</span><span class="token punctuation">,</span>
+			<span class="token property">"payloadDigest"</span><span class="token operator">:</span> <span class="token string">"0aa1a7d1de92da1056c7702dee10fba0cc7d13378f6cd11ec392da2d95c3e2fb"</span>
+		<span class="token punctuation">}</span><span class="token punctuation">,</span>
+		<span class="token property">"protocolVersion"</span><span class="token operator">:</span> <span class="token number">2</span><span class="token punctuation">,</span>
+		<span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"100"</span>
+	<span class="token punctuation">}</span><span class="token punctuation">,</span>
+	<span class="token property">"txnMetadata"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+		<span class="token property">"seqNo"</span><span class="token operator">:</span> <span class="token number">807</span><span class="token punctuation">,</span>
+		<span class="token property">"txnId"</span><span class="token operator">:</span> <span class="token string">"P8xKoMHo5tvaCBu9sg7qmE:1:9bc57c8357576385437819bd163d4cd6dda6acb9a424033d50a646bc54438ef3"</span><span class="token punctuation">,</span>
+		<span class="token property">"txnTime"</span><span class="token operator">:</span> <span class="token number">1681588183</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+</div>
 <h3 id="update"><a class="toc-anchor" href="#update" >§</a> Update</h3>
 <p>Updating a DID using the Indy DID Method occurs when a <code>NYM</code> transaction is performed by the <a class="term-reference" href="#term:nym">NYM</a>'s controller (the “owner” of the <a class="term-reference" href="#term:nym">NYM</a>) using the same identifier (<code>dest</code>). The Indy ledger MUST validate the <a class="term-reference" href="#term:nym">NYM</a> transaction prior to writing the <a class="term-reference" href="#term:nym">NYM</a> to the ledger.</p>
 <p>When a <a class="term-reference" href="#term:nym">NYM</a> is updated, the identifier (<code>dest</code>) for the <a class="term-reference" href="#term:nym">NYM</a> does not change, but other values, including the <code>verkey</code> and <code>diddocContent</code>, may be changed. This means that (as expected) the DID itself does not change, but the DIDDoc returned by the DID may change. The NYM transaction <code>version</code> must not be updated.</p>
@@ -768,6 +798,7 @@ However, DIDs on the ledger, used by organizations, enable correlation by the ps
 <li><a href="#diddoc-assembly-steps" >DIDDoc Assembly Steps</a></li>
 <li><a href="#key-agreement" >Key Agreement</a></li>
 <li><a href="#the-endpoint-attrib" >The “endpoint” ATTRIB</a></li>
+<li><a href="#the-diddoccontent-attrib" >The “diddocContent” ATTRIB</a></li>
 </ul>
 </li>
 <li><a href="#update" >Update</a></li>
